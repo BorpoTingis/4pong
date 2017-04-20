@@ -1,11 +1,11 @@
 import Html exposing (..)
 import Color exposing (..)
-import Collage exposing (..)
-import Element exposing (..)
-import Keyboard exposing (..)
-import Text exposing (..)
+import Graphics.Collage exposing (..)
+import Graphics.Element exposing (..)
+import Keyboard
+import Text
 import Time exposing (..)
-import Window exposing (..)
+import Window
 
 
  -- The game screen, or MODEL
@@ -38,8 +38,8 @@ type alias Game =
   , ball : Ball
   , player1 : Player
   , player2 : Player
-  , player3 : Player
-  , player4 : Player
+  ,
+  ,
   }
 
 
