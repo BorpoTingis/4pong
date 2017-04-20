@@ -9,10 +9,16 @@
     "exposed-modules": [],
     "dependencies": {
         "elm-lang/core": "5.1.1 <= v < 6.0.0",
+<<<<<<< HEAD
         "elm-lang/html": "2.0.0 <= v < 3.0.0",
         "elm-lang/keyboard": "1.0.1 <= v < 2.0.0",
         "elm-lang/window": "1.0.1 <= v < 2.0.0",
         "evancz/elm-graphics": "1.0.1 <= v < 2.0.0"
+=======
+        "elm-lang/dom": "1.1.1 <= v < 2.0.0",
+        "elm-lang/html": "2.0.0 <= v < 3.0.0",
+        "elm-lang/mouse": "1.0.1 <= v < 2.0.0"
+>>>>>>> 239a60d15542d7040676216f3b0504c7c834e052
     },
     "elm-version": "0.18.0 <= v < 0.19.0"
 }

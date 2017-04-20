@@ -1,9 +1,15 @@
 {
     "elm-lang/virtual-dom": "2.0.4",
+<<<<<<< HEAD
     "evancz/elm-graphics": "1.0.1",
     "elm-lang/dom": "1.1.1",
     "elm-lang/html": "2.0.0",
     "elm-lang/keyboard": "1.0.1",
     "elm-lang/window": "1.0.1",
+=======
+    "elm-lang/mouse": "1.0.1",
+    "elm-lang/dom": "1.1.1",
+    "elm-lang/html": "2.0.0",
+>>>>>>> 239a60d15542d7040676216f3b0504c7c834e052
     "elm-lang/core": "5.1.1"
 }
