@@ -1,3 +1,4 @@
+--Jerry and Merritt
 import Html exposing (..)
 import Color exposing (..)
 import Collage exposing (..)
@@ -47,7 +48,7 @@ player : Float -> Player
 player x =
   Player x 0 0 0 0
 
-
+-- default game state, 4 players and one ball
 -- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)
 defaultGame : Game
 defaultGame =
@@ -77,17 +78,16 @@ defaultGame =
             |> make game.player1
         , rect 10 40
             |> make game.player2
-        , rect 10 40 
+        , rect 40 10 -- 40 10 makes the paddle horizontal
             |> make game.player3
-        , rect 10 40
+        , rect 40 10
             |> make game.player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
-        , toForm (if game.state == Play then spacer 1 1 else txt identity msg)
-            |> move (0, 40 - gameHeight/2)
         ]
 
 
+-- default colors, black background with a white ball
   pongBlack =
     rgb rgb 0 0 0
 
