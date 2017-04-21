@@ -48,13 +48,15 @@ player x =
   Player x 0 0 0 0
 
 
--- Default game state, paused, with two players and one ball
+-- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)
 defaultGame : Game
 defaultGame =
   { state = Pause
   , ball = Ball 0 0 200 200
   , player1 = player (20-halfWidth)
   , player2 = player (halfWidth-20)
+  , player3 = player (20 - halfWidth)
+  , player4 = player (halfWidth -20)
   }
 
 
@@ -75,6 +77,10 @@ defaultGame =
             |> make game.player1
         , rect 10 40
             |> make game.player2
+        , rect 10 40 
+            |> make game.player3
+        , rect 10 40
+            |> make game.player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
         , toForm (if game.state == Play then spacer 1 1 else txt identity msg)
