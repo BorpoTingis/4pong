@@ -10,6 +10,10 @@
     "elm-lang/mouse": "1.0.1",
     "elm-lang/dom": "1.1.1",
     "elm-lang/html": "2.0.0",
+<<<<<<< Updated upstream
 >>>>>>> 239a60d15542d7040676216f3b0504c7c834e052
+=======
+    "elm-lang/keyboard": "1.0.1",
+>>>>>>> Stashed changes
     "elm-lang/core": "5.1.1"
 }
