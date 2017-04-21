@@ -66,7 +66,7 @@ defaultGame =
   view (w,h) game =
     let
       scores =
-        txt (Text.height 50) (toString game.player1.score ++ "  " ++ toString game.player2.score)
+        txt (Text.height 50) (toString game.player1.score ++ "  " ++ toString game.player2.score ++ " " ++ toString game.player3.score ++ " " ++ toString game.player4.score)
     in
       container w h middle <|
       collage gameWidth gameHeight
