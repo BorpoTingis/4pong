@@ -3,10 +3,10 @@ import Html exposing (..)
 import Color exposing (..)
 import Collage exposing (..)
 import Element exposing (..)
-import Keyboard exposing (..)
-import Text exposing (..)
+import Keyboard
+import Text
 import Time exposing (..)
-import Window exposing (..)
+import Window 
 
 
  -- The game screen, or MODEL
