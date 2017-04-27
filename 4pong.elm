@@ -6,8 +6,14 @@ import Element exposing (..)
 import Keyboard
 import Text
 import Time exposing (..)
-import Window 
+import Window
 
+
+main = program {init = (initialGame, initialSizeCmd)
+               , view = view
+               , update = update
+               , subscriptions = subscriptions
+               }
 
  -- The game screen, or MODEL
 (gameWidth,gameHeight) = (600,400)
@@ -42,7 +48,6 @@ type alias Game =
   , player3 : Player
   , player4 : Player
   }
-
 
 player : Float -> Player
 player x =
@@ -90,7 +95,6 @@ defaultGame =
 -- default colors, black background with a white ball
   pongBlack =
     rgb rgb 0 0 0
-
 
   textWhite =
     rgb 255 255 255
