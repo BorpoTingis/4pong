@@ -2,7 +2,7 @@ import Html exposing (..)
 import Color exposing (..)
 import Collage exposing (..)
 import Element exposing (..)
-import Keyboard
+import Keyboard exposing (..)
 import Text
 import Char
 import Time exposing (..)
@@ -28,40 +28,28 @@ type Msg = KeyDown KeyCode
          | NoOp
 
 
--- default game state, 4 players and one ball
--- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)Htm
-defaultGame : Game
-defaultGame =
-  { state = Pause
-  , ball = Ball 0 0 200 200
-  , player1 = player (20-halfWidth)
-  , player2 = player (halfWidth-20)
-  , player3 = player (20 - halfWidth)
-  , player4 = player (halfWidth -20)
-  }
-
 -- inputs, none for paddles 3 & 4 since they will be AI controlled? can add later if needed.
 --  keysDown "activates" the event when the key is pressed down. I'm not sure if this is ideal since someone with faster switches
 --  On their keyboard would have an advantage. Not super important
-inputs : Game -> Float -> Input
-inputs game delta =
-{ space = Set.member(Char.toCode ' ') (game.keysDown) --set space to spacebar key
-, reset = Set.member (Char.toCode 'R') (game.keysDown) --set reset to R key
-, pause = Set.member (Char.toCode 'P') (game.keysDown) --set pause to P key
-, direction = if Set.member 38 (game.keysDown) then 1 -- sets down to down arrow
-              else if Set.member 40 (game.keysDown) then 1 --sets up to up arrow
-              else 0
-, delta = inSeconds delta              
-}
 
+getInputs : Game -> Float -> Input
+getInputs game delta 
+         = { space = Set.member (Char.toCode ' ') (game.keysDown)
+           , reset = Set.member (Char.toCode 'R') (game.keysDown)
+           , pause = Set.member (Char.toCode 'P') (game.keysDown)
+           , dir = if Set.member 38 (game.keysDown) then 1 -- down arrow
+                   else if Set.member 40 (game.keysDown) then -1 -- up arrow
+                   else 0
+           , delta = inSeconds delta
+           }
 update msg game =
   case msg of
     KeyDown key ->
       ({ game | keysDown = Set.insert key game.keysDown }, Cmd.none) -- starts the event when the key is pressed down
     KeyUp key ->
       ({ game | keysDown = Set.remove key game.keysDown }, Cmd.none) -- ends the event when the key is released
-    tick delta ->
-      let input = getInput game delta
+    Tick delta ->
+      let input = getInputs game delta
       in (updateGame input game, Cmd.none)
     WindowResize dim ->
       ({ game | windowDim = dim}, Cmd.none)   
@@ -72,7 +60,7 @@ update msg game =
 subscriptions _=
   Sub.batch
     [ Keyboard.downs KeyDown
-    , keyboard.ups KeyUp
+    , Keyboard.ups KeyUp
     , Window.resizes sizeToMsg
     , AnimationFrame.diffs Tick
     ]
@@ -119,7 +107,7 @@ type alias Player =
 
 
 type alias Game =
-  { keyDown : Set KeyCode
+  { keysDown : Set KeyCode
   , windowDim : (Int, Int) 
   , state : State
   , ball : Ball
@@ -129,51 +117,172 @@ type alias Game =
   , player4 : Player
   }
 
+type alias Input =
+  { space : Bool
+  , reset : Bool
+  , pause : Bool
+  , dir : Int
+  , delta : Time
+  }
 
-delta : Signal Time
-delta = 
-    Signal.map inSeconds (fps 35) --might want to change to 60 if possible because 35fps is totally lame
 player : Float -> Player
-player x =
-  Player x 0 0 0 0
+player initialX =
+  { x = initialX
+  , y = 0
+  , vx = 0
+  , vy = 0
+  , score = 0
+  }
+initialBall = { x = 0, y = 0, vx = 200, vy = 200 }
 
-input : Signal Input
-input =
-  Signal.sampleOn delta <|
-      Signal.map4  
+initialPlayer1 = player (20 - halfWidth)
+
+initialPlayer2 = player (halfWidth - 20)
+
+initialPlayer3 = player (20 - halfWidth)
+
+initialPlayer4 = player (halfWidth  - 20)
 
 
+-- default game state, 4 players and one ball
+-- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)Htm
+initialGame =
+  { keysDown = Set.empty
+  , windowDim = (0,0)
+  , state   = Pause
+  , ball    = initialBall
+  , player1 = initialPlayer1
+  , player2 = initialPlayer2
+  , player3 = initialPlayer3
+  , player4 = initialPlayer4
+  }
+
+-- UPDATE
+updateGame : Input -> Game -> Game
+updateGame {space, reset, pause, dir, delta} ({state, ball, player1, player2, player3, player4} as game) =
+  let score1 = if ball.x >  halfWidth then 1 else 0
+      score2 = if ball.x < -halfWidth then 1 else 0
+
+      newState =
+        if  space then Play 
+        else if (pause) then Pause 
+        else if (score1 /= score2) then Pause 
+        else state
+
+      newBall =
+        if state == Pause
+            then ball
+            else updateBall delta ball player1 player2
+ in
+      if reset
+         then { game | state   = Pause
+                     , ball    = initialBall
+                     , player1 = initialPlayer1 
+                     , player2 = initialPlayer2
+                     , player3 = initialPlayer3
+                     , player4 = initialPlayer4
+              }
+      else { game | state   = newState
+                     , ball    = newBall
+                     , player1 = updatePlayer delta dir score1 player1
+                     , player2 = updateComputer newBall score2 player2
+                     
+              }
+
+updateBall : Time -> Ball -> Player -> Player -> Ball
+updateBall t ({x, y, vx, vy} as ball) p1 p2 =
+  if not (ball.x |> near 0 halfWidth)
+    then { ball | x = 0, y = 0 }
+    else physicsUpdate t
+            { ball |
+                vx = stepV vx (within ball p1) (within ball p2),
+                vy = stepV vy (y < 7-halfHeight) (y > halfHeight-7)
+            }
+
+updatePlayer : Time -> Int -> Int -> Player -> Player
+updatePlayer t dir points player =
+  let player1 = physicsUpdate  t { player | vy = toFloat dir * 200 }
+  in
+      { player1 |
+          y = clamp (22 - halfHeight) (halfHeight - 22) player1.y,
+          score = player.score + points
+      }
+
+updateComputer : Ball -> Int -> Player -> Player
+updateComputer ball points player =
+    { player |
+        y = clamp (22 - halfHeight) (halfHeight - 22) ball.y,
+        score = player.score + points
+    }
+
+physicsUpdate t ({x, y, vx, vy} as obj) =
+  { obj |
+      x = x + vx * t,
+      y = y + vy * t
+  }
+
+near : Float -> Float -> Float -> Bool
+near k c n =
+    n >= k-c && n <= k+c
+
+within ball paddle =
+    near paddle.x 8 ball.x && near paddle.y 20 ball.y
 
 
-  -- VIEW
-  view : (Int,Int) -> Game -> Element
-  view (w,h) game =
-    let
-      scores =
-        txt (Text.height 50) (toString game.player1.score ++ "  " ++ toString game.player2.score ++ " " ++ toString game.player3.score ++ " " ++ toString game.player4.score)
-    in
+stepV v lowerCollision upperCollision =
+  if lowerCollision then abs v
+  else if upperCollision then 0 - abs v
+  else v
+
+-- VIEW, this is where we would add a menu screen I think
+view : Game -> Html Msg
+view {windowDim, state, ball, player1, player2, player3, player4} =
+  let scores : Element
+      scores = txt (Text.height 50) (toString player1.score ++ "  " ++ toString player2.score)
+      (w,h) = windowDim
+  in
+      toHtml <|
       container w h middle <|
       collage gameWidth gameHeight
         [ rect gameWidth gameHeight
-            |> filled pongGreen
+            |> filled pongBlack
+        , verticalLine gameHeight
+            |> traced (dashed red)
         , oval 15 15
-            |> make game.ball
+            |> make ball
         , rect 10 40
-            |> make game.player1
+            |> make player1
         , rect 10 40
-            |> make game.player2
-        , rect 40 10 -- 40 10 makes the paddle horizontal
-            |> make game.player3
+            |> make player2
         , rect 40 10
-            |> make game.player4
+            |> make player3
+        , rect 40 10
+            |> make player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
+        , toForm (playOrPause state)
+            |> move (0, 40 - gameHeight/2)
         ]
+        
+playOrPause state =
+    case state of
+        Play    -> txt identity ""
+        Pause   -> txt identity pauseMessage
 
+verticalLine height =
+     path [(0, height), (0, -height)]
 
+    
 -- default colors, black background with a white ball
-  pongBlack =
-    rgb rgb 0 0 0
+pongBlack = rgb 0 0 0
 
-  textWhite =
-    rgb 255 255 255
+textWhite = rgb 255 255 255
+
+txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
+pauseMessage = "SPACE to start, P to pause, R to reset and &uarr;&darr; to move"
+
+make obj shape =
+    shape
+      |> filled white
+      |> move (obj.x,obj.y)
+
