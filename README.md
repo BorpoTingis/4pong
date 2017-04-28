@@ -7,3 +7,10 @@ Tutorial [here](http://elm-lang.org/blog/making-pong)
 # Packages Used
  * evancz/elm-graphics
  * elm-lang/keyboard
+
+
+
+# Todo
+[x] Add a player to the top of the screen and to the bottom of the screen
+[] make the ball collide with the new players
+[] add a menu screen
