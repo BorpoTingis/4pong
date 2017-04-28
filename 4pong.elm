@@ -39,6 +39,10 @@ getInputs game delta
            , pause = Set.member (Char.toCode 'P') (game.keysDown)
            , dir = if Set.member 38 (game.keysDown) then 1 -- down arrow
                    else if Set.member 40 (game.keysDown) then -1 -- up arrow
+                   else if Set.member 37 (game.keysDown) then 1 -- left arrow
+                   else if Set.member 39 (game.keysDown) then 1 -- right arrow
+                   else if Set.member 65 (game.keysDown) then -1 -- a key
+                   else if Set.member 68(game.keysDown) then -1 -- d key
                    else 0
            , delta = inSeconds delta
            }
@@ -125,7 +129,7 @@ type alias Input =
   , delta : Time
   }
 
-player : Float -> Player
+player : Float -> Player 
 player initialX =
   { x = initialX
   , y = 0
@@ -133,19 +137,20 @@ player initialX =
   , vy = 0
   , score = 0
   }
+
 initialBall = { x = 0, y = 0, vx = 200, vy = 200 }
 
-initialPlayer1 = player (20 - halfWidth)
+initialPlayer1 =  { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0 }
 
-initialPlayer2 = player (halfWidth - 20)
+initialPlayer2 = { x = halfWidth - 20, y = 0, vx = 0, vy = 0, score = 0 }
 
-initialPlayer3 = player (20 - halfWidth)
+initialPlayer3 = { x = 0, y = 20 - halfHeight, vx = 0, vy = 0, score = 0 }
 
-initialPlayer4 = player (halfWidth  - 20)
+initialPlayer4 = { x = 0, y = halfHeight - 20, vx = 0, vy = 0, score = 0 }
 
 
 -- default game state, 4 players and one ball
--- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)Htm
+-- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)
 initialGame =
   { keysDown = Set.empty
   , windowDim = (0,0)
@@ -172,7 +177,7 @@ updateGame {space, reset, pause, dir, delta} ({state, ball, player1, player2, pl
       newBall =
         if state == Pause
             then ball
-            else updateBall delta ball player1 player2
+            else updateBall delta ball player1 player2 player3 player4
  in
       if reset
          then { game | state   = Pause
@@ -189,8 +194,8 @@ updateGame {space, reset, pause, dir, delta} ({state, ball, player1, player2, pl
                      
               }
 
-updateBall : Time -> Ball -> Player -> Player -> Ball
-updateBall t ({x, y, vx, vy} as ball) p1 p2 =
+updateBall : Time -> Ball -> Player -> Player -> Player -> Player -> Ball
+updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
   if not (ball.x |> near 0 halfWidth)
     then { ball | x = 0, y = 0 }
     else physicsUpdate t
@@ -247,7 +252,7 @@ view {windowDim, state, ball, player1, player2, player3, player4} =
         [ rect gameWidth gameHeight
             |> filled pongBlack
         , verticalLine gameHeight
-            |> traced (dashed red)
+            |> traced (dashed white)
         , oval 15 15
             |> make ball
         , rect 10 40
@@ -269,8 +274,7 @@ playOrPause state =
         Play    -> txt identity ""
         Pause   -> txt identity pauseMessage
 
-verticalLine height =
-     path [(0, height), (0, -height)]
+verticalLine height = path [(0, height), (0, -height)]
 
     
 -- default colors, black background with a white ball

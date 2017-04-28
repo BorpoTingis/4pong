@@ -65,12 +65,12 @@ var _user$project$Main$player = function (initialX) {
 var _user$project$Main$_p4 = {ctor: '_Tuple2', _0: 300, _1: 200};
 var _user$project$Main$halfWidth = _user$project$Main$_p4._0;
 var _user$project$Main$halfHeight = _user$project$Main$_p4._1;
-var _user$project$Main$initialPlayer1 = _user$project$Main$player(20 - _user$project$Main$halfWidth);
-var _user$project$Main$initialPlayer2 = _user$project$Main$player(_user$project$Main$halfWidth - 20);
-var _user$project$Main$initialPlayer3 = _user$project$Main$player(20 - _user$project$Main$halfWidth);
-var _user$project$Main$initialPlayer4 = _user$project$Main$player(_user$project$Main$halfWidth - 20);
-var _user$project$Main$updateBall = F4(
-	function (t, _p5, p1, p2) {
+var _user$project$Main$initialPlayer1 = {x: 20 - _user$project$Main$halfWidth, y: 0, vx: 0, vy: 0, score: 0};
+var _user$project$Main$initialPlayer2 = {x: _user$project$Main$halfWidth - 20, y: 0, vx: 0, vy: 0, score: 0};
+var _user$project$Main$initialPlayer3 = {x: 0, y: 20 - _user$project$Main$halfHeight, vx: 0, vy: 0, score: 0};
+var _user$project$Main$initialPlayer4 = {x: 0, y: _user$project$Main$halfHeight - 20, vx: 0, vy: 0, score: 0};
+var _user$project$Main$updateBall = F6(
+	function (t, _p5, p1, p2, p3, p4) {
 		var _p6 = _p5;
 		var _p8 = _p6.y;
 		var _p7 = _p6;
@@ -160,7 +160,7 @@ var _user$project$Main$view = function (_p10) {
 						ctor: '::',
 						_0: A2(
 							_evancz$elm_graphics$Collage$traced,
-							_evancz$elm_graphics$Collage$dashed(_elm_lang$core$Color$red),
+							_evancz$elm_graphics$Collage$dashed(_elm_lang$core$Color$white),
 							_user$project$Main$verticalLine(_user$project$Main$gameHeight)),
 						_1: {
 							ctor: '::',
@@ -234,7 +234,7 @@ var _user$project$Main$getInputs = F2(
 				_elm_lang$core$Char$toCode(
 					_elm_lang$core$Native_Utils.chr('P')),
 				game.keysDown),
-			dir: A2(_elm_lang$core$Set$member, 38, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 40, game.keysDown) ? -1 : 0),
+			dir: A2(_elm_lang$core$Set$member, 38, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 40, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 37, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 39, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 65, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 68, game.keysDown) ? -1 : 0))))),
 			delta: _elm_lang$core$Time$inSeconds(delta)
 		};
 	});
@@ -314,7 +314,7 @@ var _user$project$Main$updateGame = F2(
 		var _p22 = _p19.player1;
 		var _p21 = _p19;
 		var _p20 = _p19.ball;
-		var newBall = _elm_lang$core$Native_Utils.eq(_p24, _user$project$Main$Pause) ? _p20 : A4(_user$project$Main$updateBall, _p25, _p20, _p22, _p23);
+		var newBall = _elm_lang$core$Native_Utils.eq(_p24, _user$project$Main$Pause) ? _p20 : A6(_user$project$Main$updateBall, _p25, _p20, _p22, _p23, _p19.player3, _p19.player4);
 		var score2 = (_elm_lang$core$Native_Utils.cmp(_p20.x, 0 - _user$project$Main$halfWidth) < 0) ? 1 : 0;
 		var score1 = (_elm_lang$core$Native_Utils.cmp(_p20.x, _user$project$Main$halfWidth) > 0) ? 1 : 0;
 		var newState = _p18.space ? _user$project$Main$Play : (_p18.pause ? _user$project$Main$Pause : ((!_elm_lang$core$Native_Utils.eq(score1, score2)) ? _user$project$Main$Pause : _p24));
