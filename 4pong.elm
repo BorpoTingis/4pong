@@ -1,12 +1,15 @@
---Jerry and Merritt
 import Html exposing (..)
 import Color exposing (..)
 import Collage exposing (..)
 import Element exposing (..)
 import Keyboard
 import Text
+import Char
 import Time exposing (..)
 import Window
+import Set exposing (Set)
+import Task
+import AnimationFrame
 
 
 main = program {init = (initialGame, initialSizeCmd)
