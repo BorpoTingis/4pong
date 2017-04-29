@@ -198,15 +198,7 @@ updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, 
           then ball2
           else updateBall delta ball2 player1 player2 player3 player4
  in
-      -- score1 =if ball1.x <  -halfWidth then -1 else if ball2.x < -halfWidth then -1 else 0
-      -- score2 = if ball1.x > halfWidth then -1 else if ball2.x > halfWidth then -1 else 0
-      -- score3 = if ball1.y < -halfHeight then -1 else if ball2.y < -halfHeight then -1 else 0
-      -- score4 = if ball1.y > halfHeight then -1 else if ball2.y > halfHeight then -1 else 0
 
-      -- if ball1.x <  -halfWidth then score1-1 else if ball2.x < -halfWidth then score1-1 else 0
-      -- if ball1.x > halfWidth then score2-1 else if ball2.x > halfWidth then score2-1 else 0
-      -- if ball1.y < -halfHeight then score3-1 else if ball2.y < -halfHeight then score3-1 else 0
-      -- if ball1.y > halfHeight then score4-1 else if ball2.y > halfHeight then score4-1 else 0
       if reset
          then { game | state   = Pause
                      , ball1    = initialBall1
@@ -235,7 +227,7 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
     else physicsUpdate t
             { ball |
                 vx = stepV vx (within ball p1) (within ball p2),
-                vy = stepV vy (within ball p3) (within ball p4) --testttttttttttttttt!!!!!!!!!!!!!!!!!!!
+                vy = stepV vy (within ball p3) (within ball p4) 
             }
 
 updatePlayerY : Time -> Int -> Int -> Player -> Player
@@ -314,7 +306,7 @@ playOrPause state =
         Play    -> txt identity ""
         Pause   -> txt identity pauseMessage
 
-verticalLine height = path [(0, height), (0, -height)]
+verticalLine height = path [(gameWidth, gameHeight), (-gameWidth, -gameHeight)]
 
 
 -- default colors
