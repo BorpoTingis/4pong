@@ -37,13 +37,18 @@ getInputs game delta
          = { space = Set.member (Char.toCode ' ') (game.keysDown)
            , reset = Set.member (Char.toCode 'R') (game.keysDown)
            , pause = Set.member (Char.toCode 'P') (game.keysDown)
-           , dir = if Set.member 38 (game.keysDown) then 1 -- down arrow
+           , dir1 = if Set.member 38 (game.keysDown) then 1 -- down arrow
                    else if Set.member 40 (game.keysDown) then -1 -- up arrow
-                   else if Set.member 37 (game.keysDown) then 1 -- left arrow
+                     else 0
+            , dir3 = if Set.member 37 (game.keysDown) then -1 -- left arrow
                    else if Set.member 39 (game.keysDown) then 1 -- right arrow
-                   else if Set.member 65 (game.keysDown) then -1 -- a key
-                   else if Set.member 68 (game.keysDown) then -1 -- d key
+                     else 0
+            , dir4 = if Set.member 65 (game.keysDown) then -1 -- a key
+                   else if Set.member 68 (game.keysDown) then 1 -- d key
                    else 0
+            , dir2 = if Set.member 87 (game.keysDown) then 1 -- w key
+                    else if Set.member 83 (game.keysDown) then -1 --s key
+                    else 0
            , delta = inSeconds delta
            }
 update msg game =
@@ -126,7 +131,10 @@ type alias Input =
   { space : Bool
   , reset : Bool
   , pause : Bool
-  , dir : Int
+  , dir1 : Int
+  , dir2 : Int
+  , dir3 : Int
+  , dir4 : Int
   , delta : Time
   }
 
@@ -168,7 +176,7 @@ initialGame =
 
 -- UPDATE
 updateGame : Input -> Game -> Game
-updateGame {space, reset, pause, dir, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
+updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
   let score1 = if ball1.x >  halfWidth then 1 else if ball2.x > halfWidth then 1 else 0
       score2 = if ball1.x < -halfWidth then 1 else if ball2.x < -halfWidth then 1 else 0
       score3 = if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
@@ -204,10 +212,10 @@ updateGame {space, reset, pause, dir, delta} ({state, ball1, ball2, player1, pla
       else { game | state   = newState
                      , ball1    = newBall1
                      , ball2 = newBall2
-                     , player1 = updatePlayer delta dir score1 player1
-                     , player2 = updatePlayer delta dir score2 player2
-                     , player3 = updatePlayer delta dir score3 player3
-                     , player4 = updatePlayer delta dir score4 player4
+                     , player1 = updatePlayerY delta dir1 score1 player1
+                     , player2 = updatePlayerY delta dir2 score2 player2
+                     , player3 = updatePlayerX delta dir3 score3 player3
+                     , player4 = updatePlayerX delta dir4 score4 player4
 
               }
 
@@ -221,22 +229,25 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
                 vy = stepV vy (y < 7-halfHeight) (y > halfHeight-7)
             }
 
-updatePlayer : Time -> Int -> Int -> Player -> Player
-updatePlayer t dir points player =
+updatePlayerY : Time -> Int -> Int -> Player -> Player
+updatePlayerY t dir points player =
   let player1 = physicsUpdate  t { player | vy = toFloat dir * 200 }
-      player2 = physicsUpdate t { player | vy = toFloat dir * 200}
+
   in
       { player1 |
           y = clamp (22 - halfHeight) (halfHeight - 22) player1.y,
           score = player.score + points
       }
+updatePlayerX : Time -> Int -> Int -> Player -> Player
+updatePlayerX t dir points player =
+  let player1 = physicsUpdate  t { player | vx = toFloat dir * 200 }
 
-  -- player2 = physicsUpdate t { player | vy = toFloat dir * 200}
-  -- in
-  --     { player2 |
-  --         y = clamp (22 - halfHeight) (halfHeight - 22) player2.y,
-  --         score = player.score + points
-  --       }
+  in
+      { player1 |
+          x = clamp (22 - halfHeight) (halfHeight - 22) player1.x,
+          score = player.score + points
+      }
+
 
 -- updateComputer : Ball -> Int -> Player -> Player
 -- updateComputer ball points player =
@@ -310,7 +321,7 @@ pongBlack = rgb 0 0 0
 textWhite = rgb 255 255 255
 
 txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
-pauseMessage = "SPACE to start, P to pause, R to reset and &uarr;&darr; to move"
+pauseMessage = "SPACE to start, P to pause, R to reset \nplayer1: &uarr; &darr;, player2: W S, player3: &larr; &rarr;, player4: A D"
 
 make obj shape =
     shape
