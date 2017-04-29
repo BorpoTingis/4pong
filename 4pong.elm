@@ -224,6 +224,8 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
     then { ball | x = 0, y = 0 }
   else if not (ball.y |> near 0 halfHeight)
     then { ball | x = 0, y = 0 }
+  --else if {score1 == 5 && ball.x < halfWidth}
+    --then { ball | vx = 50, vy = 50}
     else physicsUpdate t
             { ball |
                 vx = stepV vx (withinY ball p1) (withinY ball p2),
@@ -284,21 +286,23 @@ view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
       container w h middle <|
       collage gameWidth gameHeight
         [ rect gameWidth gameHeight
-            |> filled pongBlack
-        , verticalLine gameHeight
-            |> traced (dashed white)
+            |> filled gray
+        , redLine gameHeight
+            |> traced (dashed team1)
+        , blueLine gameHeight
+            |> traced (dashed team2)
         , oval 15 15
-            |> make ball1
+            |> makeBall ball1
         , oval 15 15
-            |> make ball2
+            |> makeBall ball2
         , rect 10 40
-            |> make player1
+            |> makeTeam1 player1
         , rect 10 40
-            |> make player2
+            |> makeTeam2 player2
         , rect 70 10
-            |> make player3
+            |> makeTeam2 player3
         , rect 70 10
-            |> make player4
+            |> makeTeam1 player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
         , toForm (playOrPause state)
@@ -310,22 +314,34 @@ playOrPause state =
         Play    -> txt identity ""
         Pause   -> txt identity pauseMessage
 
-verticalLine height = path [(gameWidth, gameHeight), (-gameWidth, -gameHeight)]
-
+redLine height = path [(gameWidth - 10, gameHeight), (-gameWidth, -gameHeight + 10)]
+blueLine height = path [(gameWidth + 10, gameHeight), (-gameWidth, -gameHeight - 10)]
 
 -- default colors
 team1 = rgb 255 0 0
 
-team2 = rgb 0 255 0
+team2 = rgb 0 0 255
 
 pongBlack = rgb 0 0 0
+
+gray = rgb 50 50 50
 
 textWhite = rgb 255 255 255
 
 txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
-pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down;, player&rarr;: W S, player&darr;: left right, player&uarr;: A D"
+pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&rarr;: W S, player&darr;: left right, player&uarr;: A D"
 
-make obj shape =
+makeBall obj shape =
     shape
       |> filled white
+      |> move (obj.x,obj.y)
+
+makeTeam1 obj shape =
+    shape
+      |> filled team1
+      |> move (obj.x,obj.y)
+
+makeTeam2 obj shape =
+    shape
+      |> filled team2
       |> move (obj.x,obj.y)
