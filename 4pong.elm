@@ -230,6 +230,8 @@ updateBall : Time -> Ball -> Player -> Player -> Player -> Player -> Ball
 updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
   if not (ball.x |> near 0 halfWidth)
     then { ball | x = 0, y = 0 }
+  else if not (ball.y |> near 0 halfHeight)
+    then { ball | x = 0, y = 0 }
     else physicsUpdate t
             { ball |
                 vx = stepV vx (within ball p1) (within ball p2),
@@ -251,7 +253,7 @@ updatePlayerX t dir points player =
 
   in
       { player1 |
-          x = clamp (22 - halfHeight) (halfHeight - 22) player1.x,
+          x = clamp (22 - halfWidth) (halfWidth - 22) player1.x,
           score = player.score + points
       }
 
@@ -304,6 +306,7 @@ view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
             |> move (0, gameHeight/2 - 40)
         , toForm (playOrPause state)
             |> move (0, 40 - gameHeight/2)
+
         ]
 
 playOrPause state =
@@ -314,7 +317,11 @@ playOrPause state =
 verticalLine height = path [(0, height), (0, -height)]
 
 
--- default colors, black background with a white ball
+-- default colors
+team1 = rgb 255 0 0
+
+team2 = rgb 0 255 0
+
 pongBlack = rgb 0 0 0
 
 textWhite = rgb 255 255 255
