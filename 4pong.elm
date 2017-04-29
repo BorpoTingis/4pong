@@ -18,7 +18,7 @@ main = program {init = (initialGame, initialSizeCmd)
                , subscriptions = subscriptions
                }
 
--- KeyDown/KeyUp/keysDown technique taken from this answer : 
+-- KeyDown/KeyUp/keysDown technique taken from this answer :
 --     http://stackoverflow.com/a/39127092/509928
 
 type Msg = KeyDown KeyCode
@@ -33,7 +33,7 @@ type Msg = KeyDown KeyCode
 --  On their keyboard would have an advantage. Not super important
 
 getInputs : Game -> Float -> Input
-getInputs game delta 
+getInputs game delta
          = { space = Set.member (Char.toCode ' ') (game.keysDown)
            , reset = Set.member (Char.toCode 'R') (game.keysDown)
            , pause = Set.member (Char.toCode 'P') (game.keysDown)
@@ -42,7 +42,7 @@ getInputs game delta
                    else if Set.member 37 (game.keysDown) then 1 -- left arrow
                    else if Set.member 39 (game.keysDown) then 1 -- right arrow
                    else if Set.member 65 (game.keysDown) then -1 -- a key
-                   else if Set.member 68(game.keysDown) then -1 -- d key
+                   else if Set.member 68 (game.keysDown) then -1 -- d key
                    else 0
            , delta = inSeconds delta
            }
@@ -56,9 +56,9 @@ update msg game =
       let input = getInputs game delta
       in (updateGame input game, Cmd.none)
     WindowResize dim ->
-      ({ game | windowDim = dim}, Cmd.none)   
+      ({ game | windowDim = dim}, Cmd.none)
     NoOp ->
-      (game, Cmd.none) 
+      (game, Cmd.none)
 
 -- Subscriptons! Allows us to listen for inputs.
 subscriptions _=
@@ -69,7 +69,7 @@ subscriptions _=
     , AnimationFrame.diffs Tick
     ]
 
--- initialSizeCmd/sizeToMsg technique taken from this answer : 
+-- initialSizeCmd/sizeToMsg technique taken from this answer :
 --  https://www.reddit.com/r/elm/comments/4jfo32/getting_the_initial_window_dimensions/d369kw1/
 
 initialSizeCmd : Cmd Msg
@@ -112,9 +112,10 @@ type alias Player =
 
 type alias Game =
   { keysDown : Set KeyCode
-  , windowDim : (Int, Int) 
+  , windowDim : (Int, Int)
   , state : State
-  , ball : Ball
+  , ball1 : Ball
+  , ball2 : Ball
   , player1 : Player
   , player2 : Player
   , player3 : Player
@@ -129,7 +130,7 @@ type alias Input =
   , delta : Time
   }
 
-player : Float -> Player 
+player : Float -> Player
 player initialX =
   { x = initialX
   , y = 0
@@ -138,7 +139,9 @@ player initialX =
   , score = 0
   }
 
-initialBall = { x = 0, y = 0, vx = 200, vy = 200 }
+initialBall1 = { x = 0, y = 0, vx = 200, vy = 200 }
+
+initialBall2 = { x = 0, y = 0, vx = 200, vy = 200}
 
 initialPlayer1 =  { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0 }
 
@@ -155,7 +158,8 @@ initialGame =
   { keysDown = Set.empty
   , windowDim = (0,0)
   , state   = Pause
-  , ball    = initialBall
+  , ball1    = initialBall1
+  , ball2 = initialBall2
   , player1 = initialPlayer1
   , player2 = initialPlayer2
   , player3 = initialPlayer3
@@ -164,34 +168,47 @@ initialGame =
 
 -- UPDATE
 updateGame : Input -> Game -> Game
-updateGame {space, reset, pause, dir, delta} ({state, ball, player1, player2, player3, player4} as game) =
-  let score1 = if ball.x >  halfWidth then 1 else 0
-      score2 = if ball.x < -halfWidth then 1 else 0
+updateGame {space, reset, pause, dir, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
+  let score1 = if ball1.x >  halfWidth then 1 else if ball2.x > halfWidth then 1 else 0
+      score2 = if ball1.x < -halfWidth then 1 else if ball2.x < -halfWidth then 1 else 0
+      score3 = if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
+      score4 = if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
+
+
 
       newState =
-        if  space then Play 
-        else if (pause) then Pause 
-        else if (score1 /= score2) then Pause 
+        if  space then Play
+        else if (pause) then Pause
+        else if (score1 /= score2) then Pause
         else state
 
-      newBall =
+      newBall1 =
         if state == Pause
-            then ball
-            else updateBall delta ball player1 player2 player3 player4
+            then ball1
+            else updateBall delta ball1 player1 player2 player3 player4
+
+      newBall2 =
+        if state == Pause
+          then ball2
+          else updateBall delta ball2 player1 player2 player3 player4
  in
       if reset
          then { game | state   = Pause
-                     , ball    = initialBall
-                     , player1 = initialPlayer1 
+                     , ball1    = initialBall1
+                     , ball2 = initialBall2
+                     , player1 = initialPlayer1
                      , player2 = initialPlayer2
                      , player3 = initialPlayer3
                      , player4 = initialPlayer4
               }
       else { game | state   = newState
-                     , ball    = newBall
+                     , ball1    = newBall1
+                     , ball2 = newBall2
                      , player1 = updatePlayer delta dir score1 player1
-                     , player2 = updateComputer newBall score2 player2
-                     
+                     , player2 = updatePlayer delta dir score2 player2
+                     , player3 = updatePlayer delta dir score3 player3
+                     , player4 = updatePlayer delta dir score4 player4
+
               }
 
 updateBall : Time -> Ball -> Player -> Player -> Player -> Player -> Ball
@@ -207,18 +224,26 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
 updatePlayer : Time -> Int -> Int -> Player -> Player
 updatePlayer t dir points player =
   let player1 = physicsUpdate  t { player | vy = toFloat dir * 200 }
+      player2 = physicsUpdate t { player | vy = toFloat dir * 200}
   in
       { player1 |
           y = clamp (22 - halfHeight) (halfHeight - 22) player1.y,
           score = player.score + points
       }
 
-updateComputer : Ball -> Int -> Player -> Player
-updateComputer ball points player =
-    { player |
-        y = clamp (22 - halfHeight) (halfHeight - 22) ball.y,
-        score = player.score + points
-    }
+  -- player2 = physicsUpdate t { player | vy = toFloat dir * 200}
+  -- in
+  --     { player2 |
+  --         y = clamp (22 - halfHeight) (halfHeight - 22) player2.y,
+  --         score = player.score + points
+  --       }
+
+-- updateComputer : Ball -> Int -> Player -> Player
+-- updateComputer ball points player =
+--     { player |
+--         y = clamp (22 - halfHeight) (halfHeight - 22) ball.y,
+--         score = player.score + points
+--     }
 
 physicsUpdate t ({x, y, vx, vy} as obj) =
   { obj |
@@ -241,9 +266,9 @@ stepV v lowerCollision upperCollision =
 
 -- VIEW, this is where we would add a menu screen I think
 view : Game -> Html Msg
-view {windowDim, state, ball, player1, player2, player3, player4} =
+view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
   let scores : Element
-      scores = txt (Text.height 50) (toString player1.score ++ "  " ++ toString player2.score)
+      scores = txt (Text.height 50) (toString player1.score ++ "  " ++ toString player2.score ++ "  " ++ toString player3.score ++ "  " ++ toString player4.score)
       (w,h) = windowDim
   in
       toHtml <|
@@ -254,7 +279,9 @@ view {windowDim, state, ball, player1, player2, player3, player4} =
         , verticalLine gameHeight
             |> traced (dashed white)
         , oval 15 15
-            |> make ball
+            |> make ball1
+        , oval 15 15
+            |> make ball2
         , rect 10 40
             |> make player1
         , rect 10 40
@@ -268,7 +295,7 @@ view {windowDim, state, ball, player1, player2, player3, player4} =
         , toForm (playOrPause state)
             |> move (0, 40 - gameHeight/2)
         ]
-        
+
 playOrPause state =
     case state of
         Play    -> txt identity ""
@@ -276,7 +303,7 @@ playOrPause state =
 
 verticalLine height = path [(0, height), (0, -height)]
 
-    
+
 -- default colors, black background with a white ball
 pongBlack = rgb 0 0 0
 
@@ -289,4 +316,3 @@ make obj shape =
     shape
       |> filled white
       |> move (obj.x,obj.y)
-
