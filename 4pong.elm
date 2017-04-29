@@ -147,9 +147,9 @@ player initialX =
   , score = 0
   }
 
-initialBall1 = { x = 0, y = 0, vx = 200, vy = 200 }
+initialBall1 = { x = 0, y = 0, vx = 150, vy = 150 }
 
-initialBall2 = { x = 0, y = 0, vx = -200, vy = -200}
+initialBall2 = { x = 0, y = 0, vx = -150, vy = -150}
 
 initialPlayer1 =  { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0 }
 
@@ -226,13 +226,13 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
     then { ball | x = 0, y = 0 }
     else physicsUpdate t
             { ball |
-                vx = stepV vx (within ball p1) (within ball p2),
-                vy = stepV vy (within ball p3) (within ball p4) 
+                vx = stepV vx (withinY ball p1) (withinY ball p2),
+                vy = stepV vy (withinX ball p3) (withinX ball p4)
             }
 
 updatePlayerY : Time -> Int -> Int -> Player -> Player
 updatePlayerY t dir points player =
-  let player1 = physicsUpdate  t { player | vy = toFloat dir * 200 }
+  let player1 = physicsUpdate  t { player | vy = toFloat dir * 200}
 
   in
       { player1 |
@@ -259,8 +259,13 @@ near : Float -> Float -> Float -> Bool
 near k c n =
     n >= k-c && n <= k+c
 
-within ball paddle =
+withinY ball paddle =
     near paddle.x 8 ball.x && near paddle.y 20 ball.y
+
+
+
+withinX ball paddle =
+    near paddle.x 40 ball.x && near paddle.y 8 ball.y
 
 
 stepV v lowerCollision upperCollision =
@@ -298,7 +303,6 @@ view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
             |> move (0, gameHeight/2 - 40)
         , toForm (playOrPause state)
             |> move (0, 80 - gameHeight/2)
-
         ]
 
 playOrPause state =
