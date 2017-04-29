@@ -279,7 +279,7 @@ stepV v lowerCollision upperCollision =
 view : Game -> Html Msg
 view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
   let scores : Element
-      scores = txt (Text.height 50) (toString player1.score ++ "  " ++ toString player2.score ++ "  " ++ toString player3.score ++ "  " ++ toString player4.score)
+      scores = txt (Text.height 25) ("P1-" ++ toString player1.score ++ "  P2-" ++ toString player2.score ++ "  P3-" ++ toString player3.score ++ "  P4-" ++ toString player4.score)
       (w,h) = windowDim
   in
       toHtml <|
