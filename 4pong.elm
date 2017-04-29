@@ -149,15 +149,15 @@ player initialX =
 
 initialBall1 = { x = 0, y = 0, vx = 200, vy = 200 }
 
-initialBall2 = { x = 0, y = 0, vx = 200, vy = 200}
+initialBall2 = { x = 0, y = 0, vx = -200, vy = -200}
 
 initialPlayer1 =  { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0 }
 
 initialPlayer2 = { x = halfWidth - 20, y = 0, vx = 0, vy = 0, score = 0 }
 
-initialPlayer3 = { x = 0, y = 20 - halfHeight, vx = 0, vy = 0, score = 0 }
+initialPlayer3 = { x = 0, y = 10 - halfHeight, vx = 0, vy = 0, score = 0 }
 
-initialPlayer4 = { x = 0, y = halfHeight - 20, vx = 0, vy = 0, score = 0 }
+initialPlayer4 = { x = 0, y = halfHeight - 10, vx = 0, vy = 0, score = 0 }
 
 
 -- default game state, 4 players and one ball
@@ -178,14 +178,14 @@ initialGame =
 updateGame : Input -> Game -> Game
 updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
   let
-      score2 = if ball1.x <  -halfWidth then 1 else if ball2.x < -halfWidth then 1 else if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
-      score1 = if ball1.x > halfWidth then 1 else if ball2.x > halfWidth then 1 else if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
+      score2 = if ball1.x <  -halfWidth then 1 else if ball2.x < -halfWidth then 1 else if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
+      score1 = if ball1.x > halfWidth then 1 else if ball2.x > halfWidth then 1 else if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
 
 
       newState =
         if  space then Play
         else if (pause) then Pause
-        else if (score1 /= score2) then Pause
+        --else if (score1 /= score2) then Pause
         else state
 
       newBall1 =
@@ -305,7 +305,7 @@ view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
         , toForm scores
             |> move (0, gameHeight/2 - 40)
         , toForm (playOrPause state)
-            |> move (0, 40 - gameHeight/2)
+            |> move (0, 80 - gameHeight/2)
 
         ]
 
