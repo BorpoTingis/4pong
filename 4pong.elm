@@ -177,11 +177,9 @@ initialGame =
 -- UPDATE
 updateGame : Input -> Game -> Game
 updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
-  let score1 = if ball1.x >  halfWidth then 1 else if ball2.x > halfWidth then 1 else 0
-      score2 = if ball1.x < -halfWidth then 1 else if ball2.x < -halfWidth then 1 else 0
-      score3 = if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
-      score4 = if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
-
+  let
+      score2 = if ball1.x <  -halfWidth then 1 else if ball2.x < -halfWidth then 1 else if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
+      score1 = if ball1.x > halfWidth then 1 else if ball2.x > halfWidth then 1 else if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
 
 
       newState =
@@ -200,6 +198,15 @@ updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, 
           then ball2
           else updateBall delta ball2 player1 player2 player3 player4
  in
+      -- score1 =if ball1.x <  -halfWidth then -1 else if ball2.x < -halfWidth then -1 else 0
+      -- score2 = if ball1.x > halfWidth then -1 else if ball2.x > halfWidth then -1 else 0
+      -- score3 = if ball1.y < -halfHeight then -1 else if ball2.y < -halfHeight then -1 else 0
+      -- score4 = if ball1.y > halfHeight then -1 else if ball2.y > halfHeight then -1 else 0
+
+      -- if ball1.x <  -halfWidth then score1-1 else if ball2.x < -halfWidth then score1-1 else 0
+      -- if ball1.x > halfWidth then score2-1 else if ball2.x > halfWidth then score2-1 else 0
+      -- if ball1.y < -halfHeight then score3-1 else if ball2.y < -halfHeight then score3-1 else 0
+      -- if ball1.y > halfHeight then score4-1 else if ball2.y > halfHeight then score4-1 else 0
       if reset
          then { game | state   = Pause
                      , ball1    = initialBall1
@@ -214,8 +221,8 @@ updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, 
                      , ball2 = newBall2
                      , player1 = updatePlayerY delta dir1 score1 player1
                      , player2 = updatePlayerY delta dir2 score2 player2
-                     , player3 = updatePlayerX delta dir3 score3 player3
-                     , player4 = updatePlayerX delta dir4 score4 player4
+                     , player3 = updatePlayerX delta dir3 score2 player3
+                     , player4 = updatePlayerX delta dir4 score1 player4
 
               }
 
@@ -226,7 +233,7 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
     else physicsUpdate t
             { ball |
                 vx = stepV vx (within ball p1) (within ball p2),
-                vy = stepV vy (y < 7-halfHeight) (y > halfHeight-7)
+                vy = stepV vy (within ball p3) (within ball p4) --testttttttttttttttt!!!!!!!!!!!!!!!!!!!
             }
 
 updatePlayerY : Time -> Int -> Int -> Player -> Player
@@ -247,14 +254,6 @@ updatePlayerX t dir points player =
           x = clamp (22 - halfHeight) (halfHeight - 22) player1.x,
           score = player.score + points
       }
-
-
--- updateComputer : Ball -> Int -> Player -> Player
--- updateComputer ball points player =
---     { player |
---         y = clamp (22 - halfHeight) (halfHeight - 22) ball.y,
---         score = player.score + points
---     }
 
 physicsUpdate t ({x, y, vx, vy} as obj) =
   { obj |
@@ -279,7 +278,7 @@ stepV v lowerCollision upperCollision =
 view : Game -> Html Msg
 view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
   let scores : Element
-      scores = txt (Text.height 25) ("P1-" ++ toString player1.score ++ "  P2-" ++ toString player2.score ++ "  P3-" ++ toString player3.score ++ "  P4-" ++ toString player4.score)
+      scores = txt (Text.height 25) ("Team&larr;&uarr; : " ++ toString player1.score ++ "  Team&rarr;&darr; : " ++ toString player2.score)
       (w,h) = windowDim
   in
       toHtml <|
@@ -297,9 +296,9 @@ view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
             |> make player1
         , rect 10 40
             |> make player2
-        , rect 40 10
+        , rect 70 10
             |> make player3
-        , rect 40 10
+        , rect 70 10
             |> make player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
@@ -321,7 +320,7 @@ pongBlack = rgb 0 0 0
 textWhite = rgb 255 255 255
 
 txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
-pauseMessage = "SPACE to start, P to pause, R to reset \nplayer1: &uarr; &darr;, player2: W S, player3: &larr; &rarr;, player4: A D"
+pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down;, player&rarr;: W S, player&darr;: left right, player&uarr;: A D"
 
 make obj shape =
     shape
