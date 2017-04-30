@@ -40,10 +40,10 @@ getInputs game delta
            , dir1 = if Set.member 38 (game.keysDown) then 1 -- down arrow
                    else if Set.member 40 (game.keysDown) then -1 -- up arrow
                      else 0
-            , dir3 = if Set.member 37 (game.keysDown) then -1 -- left arrow
+            , dir4 = if Set.member 37 (game.keysDown) then -1 -- left arrow
                    else if Set.member 39 (game.keysDown) then 1 -- right arrow
                      else 0
-            , dir4 = if Set.member 65 (game.keysDown) then -1 -- a key
+            , dir3 = if Set.member 65 (game.keysDown) then -1 -- a key
                    else if Set.member 68 (game.keysDown) then 1 -- d key
                    else 0
             , dir2 = if Set.member 87 (game.keysDown) then 1 -- w key
@@ -121,6 +121,8 @@ type alias Game =
   , state : State
   , ball1 : Ball
   , ball2 : Ball
+  , ball3 : Ball --Powerup
+  , ball4 : Ball --Powerip
   , player1 : Player
   , player2 : Player
   , player3 : Player
@@ -151,6 +153,10 @@ initialBall1 = { x = 0, y = 0, vx = 150, vy = 150 }
 
 initialBall2 = { x = 0, y = 0, vx = -150, vy = -150}
 
+initialBall3 = {x = 0, y = 0, vx = 100, vy = -100} --Powerup
+
+initialBall4 = {x = 0, y = 0, vx = -100, vy = 100} --Powerup
+
 initialPlayer1 =  { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0 }
 
 initialPlayer2 = { x = halfWidth - 20, y = 0, vx = 0, vy = 0, score = 0 }
@@ -168,6 +174,8 @@ initialGame =
   , state   = Pause
   , ball1    = initialBall1
   , ball2 = initialBall2
+  , ball3 = initialBall3 --Powerup
+  , ball4 = initialBall4 --Powerup
   , player1 = initialPlayer1
   , player2 = initialPlayer2
   , player3 = initialPlayer3
@@ -176,16 +184,30 @@ initialGame =
 
 -- UPDATE
 updateGame : Input -> Game -> Game
-updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
+updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, ball3, ball4, player1, player2, player3, player4} as game) = --powerup test
   let
-      score2 = if ball1.x <  -halfWidth then 1 else if ball2.x < -halfWidth then 1 else if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
-      score1 = if ball1.x > halfWidth then 1 else if ball2.x > halfWidth then 1 else if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
+      score2 = if ball1.x <  -halfWidth then 1
+        else if ball2.x < -halfWidth then 1
+          else if ball1.y > halfHeight then 1
+            else if ball2.y > halfHeight then 1
+              else if ball4.x < -halfWidth then 1 --Powerup
+                else if ball4.y > halfHeight then 1
+              else 0
+
+      score1 = if ball1.x > halfWidth then 1
+        else if ball2.x > halfWidth then 1
+          else if ball1.y < -halfHeight then 1
+            else if ball2.y < -halfHeight then 1
+              else if ball3.x > halfWidth then 1 --Powerup
+                else if ball3.y < -halfHeight then 1
+                  else 0
 
 
       newState =
         if  space then Play
         else if (pause) then Pause
-        --else if (score1 /= score2) then Pause
+        else if (player1.score >= 30) then Pause
+        else if (player2.score >= 30) then Pause--save this for capping max score
         else state
 
       newBall1 =
@@ -197,20 +219,67 @@ updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, 
         if state == Pause
           then ball2
           else updateBall delta ball2 player1 player2 player3 player4
+
+      newBall3 = --powerup
+        if (state == Pause)
+          then ball3
+          else updateBall delta ball3 player1 player2 player3 player4
+      newBall4 = --powerup
+        if (state == Pause)
+          then ball4
+          else updateBall delta ball4 player1 player2 player3 player4
  in
 
       if reset
          then { game | state   = Pause
                      , ball1    = initialBall1
                      , ball2 = initialBall2
+                     , ball3 = initialBall3 --Powerup
+                     , ball4 = initialBall4 --Powerup
                      , player1 = initialPlayer1
                      , player2 = initialPlayer2
                      , player3 = initialPlayer3
                      , player4 = initialPlayer4
               }
+        else if (player1.score >= 5 && player2.score < 5)
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+
+                  }
+        else if (player2.score >= 5 && player1.score < 5)
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball4 = newBall4--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+
+                  }
+      else if (player2.score >= 5 && player1.score >= 5)
+        then { game | state   = newState
+                       , ball1 = newBall1
+                       , ball2 = newBall2
+                       , ball3 = newBall3--Powerup
+                       , ball4 = newBall4--Powerup
+                       , player1 = updatePlayerY delta dir1 score1 player1
+                       , player2 = updatePlayerY delta dir2 score2 player2
+                       , player3 = updatePlayerX delta dir3 score2 player3
+                       , player4 = updatePlayerX delta dir4 score1 player4
+
+                }
+
       else { game | state   = newState
-                     , ball1    = newBall1
+                     , ball1 = newBall1
                      , ball2 = newBall2
+
                      , player1 = updatePlayerY delta dir1 score1 player1
                      , player2 = updatePlayerY delta dir2 score2 player2
                      , player3 = updatePlayerX delta dir3 score2 player3
@@ -224,7 +293,7 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
     then { ball | x = 0, y = 0 }
   else if not (ball.y |> near 0 halfHeight)
     then { ball | x = 0, y = 0 }
-  --else if {score1 == 5 && ball.x < halfWidth}
+  --else if {score1 == 5 && ball.x < halfWidth} --powerup test
     --then { ball | vx = 50, vy = 50}
     else physicsUpdate t
             { ball |
@@ -277,7 +346,7 @@ stepV v lowerCollision upperCollision =
 
 -- VIEW, this is where we would add a menu screen I think
 view : Game -> Html Msg
-view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
+view {windowDim, state, ball1, ball2, ball3, ball4, player1, player2, player3, player4} =
   let scores : Element
       scores = txt (Text.height 25) ("Team&larr;&uarr; : " ++ toString player1.score ++ "  Team&rarr;&darr; : " ++ toString player2.score)
       (w,h) = windowDim
@@ -295,6 +364,10 @@ view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
             |> makeBall ball1
         , oval 15 15
             |> makeBall ball2
+        , oval 15 15
+            |> makePowerBall1 ball3 --Powerup
+        , oval 15 15
+            |> makePowerBall2 ball4 --Powerup
         , rect 10 40
             |> makeTeam1 player1
         , rect 10 40
@@ -318,23 +391,35 @@ redLine height = path [(gameWidth - 10, gameHeight), (-gameWidth, -gameHeight + 
 blueLine height = path [(gameWidth + 10, gameHeight), (-gameWidth, -gameHeight - 10)]
 
 -- default colors
-team1 = rgb 255 0 0
+team1 = rgb 0 0 0
 
-team2 = rgb 0 0 255
+team2 = rgb 255 255 255
 
 pongBlack = rgb 0 0 0
 
-gray = rgb 50 50 50
+gray = rgb 125 125 125
 
 textWhite = rgb 255 255 255
 
+gold = rgb 218 165 32
+
 txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
-pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&rarr;: W S, player&darr;: left right, player&uarr;: A D"
+pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&uarr;: left right, player&darr;: A D, player&rarr;: W S"
 
 makeBall obj shape =
     shape
-      |> filled white
+      |> filled gold
       |> move (obj.x,obj.y)
+
+makePowerBall1 obj shape =
+  shape
+    |> filled team1
+    |> move (obj.x, obj.y)
+
+makePowerBall2 obj shape =
+  shape
+    |> filled team2
+    |> move (obj.x, obj.y)
 
 makeTeam1 obj shape =
     shape
