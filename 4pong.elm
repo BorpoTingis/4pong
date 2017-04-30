@@ -122,11 +122,12 @@ type alias Game =
   , ball1 : Ball
   , ball2 : Ball
   , ball3 : Ball --Powerup
-  , ball4 : Ball --Powerip
+  , ball4 : Ball --Powerup
   , player1 : Player
   , player2 : Player
   , player3 : Player
   , player4 : Player
+  --, ai1 : Player --PowerupTest
   }
 
 type alias Input =
@@ -165,7 +166,7 @@ initialPlayer3 = { x = 0, y = 10 - halfHeight, vx = 0, vy = 0, score = 0 }
 
 initialPlayer4 = { x = 0, y = halfHeight - 10, vx = 0, vy = 0, score = 0 }
 
-
+--initialAi1 = { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0} --Powerup
 -- default game state, 4 players and one ball
 -- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)
 initialGame =
@@ -180,6 +181,7 @@ initialGame =
   , player2 = initialPlayer2
   , player3 = initialPlayer3
   , player4 = initialPlayer4
+  --, ai1 = initialAi1 --Powerup
   }
 
 -- UPDATE
@@ -240,6 +242,7 @@ updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, 
                      , player2 = initialPlayer2
                      , player3 = initialPlayer3
                      , player4 = initialPlayer4
+                     --, ai1 = initialAi1 --Powerup
               }
         else if (player1.score >= 5 && player2.score < 5)
           then { game | state   = newState
@@ -293,13 +296,27 @@ updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
     then { ball | x = 0, y = 0 }
   else if not (ball.y |> near 0 halfHeight)
     then { ball | x = 0, y = 0 }
-  --else if {score1 == 5 && ball.x < halfWidth} --powerup test
-    --then { ball | vx = 50, vy = 50}
-    else physicsUpdate t
+    else if (p1.score < 5 && p2.score < 5) then physicsUpdate t --powerup
             { ball |
                 vx = stepV vx (withinY ball p1) (withinY ball p2),
                 vy = stepV vy (withinX ball p3) (withinX ball p4)
             }
+    else if (p1.score >= 5 && p2.score < 5) then physicsUpdate t
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (withinY ball p2),
+                vy = stepV vy (withinX ball p3) (powerupWithinX ball p4)
+            }
+    else  if (p1.score < 5 && p2.score >= 5) then physicsUpdate t
+            { ball |
+                vx = stepV vx (withinY ball p1) (powerupWithinY ball p2),
+                vy = stepV vy (powerupWithinX ball p3) (withinX ball p4)
+            }
+    else physicsUpdate t
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (powerupWithinY ball p2),
+                vy = stepV vy (powerupWithinX ball p3) (powerupWithinX ball p4)
+            }
+
 
 updatePlayerY : Time -> Int -> Int -> Player -> Player
 updatePlayerY t dir points player =
@@ -333,11 +350,14 @@ near k c n =
 withinY ball paddle =
     near paddle.x 8 ball.x && near paddle.y 20 ball.y
 
-
+powerupWithinY ball paddle =
+  near paddle.x 8 ball.x && near paddle.y 30 ball.y
 
 withinX ball paddle =
     near paddle.x 40 ball.x && near paddle.y 8 ball.y
 
+powerupWithinX ball paddle =
+  near paddle.x 50 ball.x && near paddle.y 8 ball.y
 
 stepV v lowerCollision upperCollision =
   if lowerCollision then abs v
