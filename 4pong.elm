@@ -351,6 +351,7 @@ view {windowDim, state, ball1, ball2, ball3, ball4, player1, player2, player3, p
       scores = txt (Text.height 25) ("Team&larr;&uarr; : " ++ toString player1.score ++ "  Team&rarr;&darr; : " ++ toString player2.score)
       (w,h) = windowDim
   in
+
       toHtml <|
       container w h middle <|
       collage gameWidth gameHeight
@@ -368,18 +369,32 @@ view {windowDim, state, ball1, ball2, ball3, ball4, player1, player2, player3, p
             |> makePowerBall1 ball3 --Powerup
         , oval 15 15
             |> makePowerBall2 ball4 --Powerup
-        , rect 10 40
+        , if (player1.score < 5) then
+          rect 10 40
             |> makeTeam1 player1
-        , rect 10 40
+          else rect 10 70
+            |> makeTeam1 player1
+        , if (player2.score < 5) then
+          rect 10 40
             |> makeTeam2 player2
-        , rect 70 10
+          else rect 10 70
+            |> makeTeam2 player2
+        , if (player2.score < 5) then
+          rect 70 10
             |> makeTeam2 player3
-        , rect 70 10
+          else rect 90 10
+            |> makeTeam2 player3
+        , if (player1.score < 5) then
+          rect 70 10
+            |> makeTeam1 player4
+          else rect 90 10
             |> makeTeam1 player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
         , toForm (playOrPause state)
             |> move (0, 80 - gameHeight/2)
+        , toForm (powerupString)
+            |> move (0, gameHeight/2 - 100)
         ]
 
 playOrPause state =
@@ -387,8 +402,9 @@ playOrPause state =
         Play    -> txt identity ""
         Pause   -> txt identity pauseMessage
 
-redLine height = path [(gameWidth - 10, gameHeight), (-gameWidth, -gameHeight + 10)]
-blueLine height = path [(gameWidth + 10, gameHeight), (-gameWidth, -gameHeight - 10)]
+powerupString = txt2 identity powerupMessage
+blueLine height = path [(gameWidth - 10, gameHeight), (-gameWidth, -gameHeight + 10)]
+redLine height = path [(gameWidth + 10, gameHeight), (-gameWidth, -gameHeight - 10)]
 
 -- default colors
 team1 = rgb 0 0 0
@@ -405,6 +421,9 @@ gold = rgb 218 165 32
 
 txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
 pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&uarr;: left right, player&darr;: A D, player&rarr;: W S"
+
+txt2 g = Text.fromString >> Text.color black >> Text.monospace >> g >> leftAligned
+powerupMessage = "1st power-up: extended paddles\nrequried score: 5\n\n2nd power-up: an extra team-ball\nrequired score: 5"
 
 makeBall obj shape =
     shape
