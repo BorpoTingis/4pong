@@ -7,6 +7,8 @@ Tutorial [here](http://elm-lang.org/blog/making-pong)
 # Packages Used
  * evancz/elm-graphics
  * elm-lang/keyboard
-
+ * elm-lang/animation-frame
+ * elm-lang/html
+ * elm-lang/window
 
 
