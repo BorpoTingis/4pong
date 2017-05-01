@@ -11686,23 +11686,57 @@ var _evancz$elm_graphics$Collage$ngon = F2(
 				f,
 				A2(_elm_lang$core$List$range, 0, n - 1)));
 	});
+<<<<<<< HEAD
 var _user$project$Main$make = F2(
+=======
+var _user$project$Main$makeFlag = F2(
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 	function (obj, shape) {
 		return A2(
 			_evancz$elm_graphics$Collage$move,
 			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+<<<<<<< HEAD
 			A2(_evancz$elm_graphics$Collage$filled, _elm_lang$core$Color$white, shape));
 	});
 var _user$project$Main$pauseMessage = 'SPACE to start, P to pause, R to reset \nplayer&larr;: up down;, player&rarr;: W S, player&darr;: left right, player&uarr;: A D';
 var _user$project$Main$textWhite = A3(_elm_lang$core$Color$rgb, 255, 255, 255);
 var _user$project$Main$txt = function (f) {
 	return function (_p0) {
+=======
+			A2(_evancz$elm_graphics$Collage$filled, _elm_lang$core$Color$red, shape));
+	});
+var _user$project$Main$powerupMessage = '1st power-up: extended paddles\nrequried score: 3\n\n2nd power-up: an extra team-ball\nrequired score: 5\n\n3rd power-up: team-AI\nrequired score: 7';
+var _user$project$Main$txt2 = function (g) {
+	return function (_p0) {
+		return _evancz$elm_graphics$Element$leftAligned(
+			g(
+				_evancz$elm_graphics$Text$monospace(
+					A2(
+						_evancz$elm_graphics$Text$color,
+						_elm_lang$core$Color$black,
+						_evancz$elm_graphics$Text$fromString(_p0)))));
+	};
+};
+var _user$project$Main$pauseMessage = 'SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&uarr;: left right, player&darr;: A D, player&rarr;: W S';
+var _user$project$Main$gold = A3(_elm_lang$core$Color$rgb, 218, 165, 32);
+var _user$project$Main$makeBall = F2(
+	function (obj, shape) {
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+			A2(_evancz$elm_graphics$Collage$filled, _user$project$Main$gold, shape));
+	});
+var _user$project$Main$textWhite = A3(_elm_lang$core$Color$rgb, 255, 255, 255);
+var _user$project$Main$txt = function (f) {
+	return function (_p1) {
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 		return _evancz$elm_graphics$Element$leftAligned(
 			f(
 				_evancz$elm_graphics$Text$monospace(
 					A2(
 						_evancz$elm_graphics$Text$color,
 						_user$project$Main$textWhite,
+<<<<<<< HEAD
 						_evancz$elm_graphics$Text$fromString(_p0)))));
 	};
 };
@@ -11712,14 +11746,68 @@ var _user$project$Main$team1 = A3(_elm_lang$core$Color$rgb, 255, 0, 0);
 var _user$project$Main$playOrPause = function (state) {
 	var _p1 = state;
 	if (_p1.ctor === 'Play') {
+=======
+						_evancz$elm_graphics$Text$fromString(_p1)))));
+	};
+};
+var _user$project$Main$gray = A3(_elm_lang$core$Color$rgb, 125, 125, 125);
+var _user$project$Main$makeAi = F2(
+	function (obj, shape) {
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+			A2(_evancz$elm_graphics$Collage$filled, _user$project$Main$gray, shape));
+	});
+var _user$project$Main$pongBlack = A3(_elm_lang$core$Color$rgb, 0, 0, 0);
+var _user$project$Main$team2 = A3(_elm_lang$core$Color$rgb, 255, 255, 255);
+var _user$project$Main$makePowerBall2 = F2(
+	function (obj, shape) {
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+			A2(_evancz$elm_graphics$Collage$filled, _user$project$Main$team2, shape));
+	});
+var _user$project$Main$makeTeam2 = F2(
+	function (obj, shape) {
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+			A2(_evancz$elm_graphics$Collage$filled, _user$project$Main$team2, shape));
+	});
+var _user$project$Main$team1 = A3(_elm_lang$core$Color$rgb, 0, 0, 0);
+var _user$project$Main$makePowerBall1 = F2(
+	function (obj, shape) {
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+			A2(_evancz$elm_graphics$Collage$filled, _user$project$Main$team1, shape));
+	});
+var _user$project$Main$makeTeam1 = F2(
+	function (obj, shape) {
+		return A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: obj.x, _1: obj.y},
+			A2(_evancz$elm_graphics$Collage$filled, _user$project$Main$team1, shape));
+	});
+var _user$project$Main$powerupString = A2(_user$project$Main$txt2, _elm_lang$core$Basics$identity, _user$project$Main$powerupMessage);
+var _user$project$Main$playOrPause = function (state) {
+	var _p2 = state;
+	if (_p2.ctor === 'Play') {
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 		return A2(_user$project$Main$txt, _elm_lang$core$Basics$identity, '');
 	} else {
 		return A2(_user$project$Main$txt, _elm_lang$core$Basics$identity, _user$project$Main$pauseMessage);
 	}
 };
+<<<<<<< HEAD
 var _user$project$Main$stepV = F3(
 	function (v, lowerCollision, upperCollision) {
 		return lowerCollision ? _elm_lang$core$Basics$abs(v) : (upperCollision ? (0 - _elm_lang$core$Basics$abs(v)) : v);
+=======
+var _user$project$Main$stepV = F5(
+	function (v, lowerCollision, lower1, upperCollision, upper1) {
+		return lowerCollision ? _elm_lang$core$Basics$abs(v) : (upperCollision ? (0 - _elm_lang$core$Basics$abs(v)) : (lower1 ? _elm_lang$core$Basics$abs(v) : (upper1 ? (0 - _elm_lang$core$Basics$abs(v)) : v)));
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 	});
 var _user$project$Main$near = F3(
 	function (k, c, n) {
@@ -11729,10 +11817,18 @@ var _user$project$Main$withinY = F2(
 	function (ball, paddle) {
 		return A3(_user$project$Main$near, paddle.x, 8, ball.x) && A3(_user$project$Main$near, paddle.y, 20, ball.y);
 	});
+<<<<<<< HEAD
+=======
+var _user$project$Main$powerupWithinY = F2(
+	function (ball, paddle) {
+		return A3(_user$project$Main$near, paddle.x, 8, ball.x) && A3(_user$project$Main$near, paddle.y, 30, ball.y);
+	});
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 var _user$project$Main$withinX = F2(
 	function (ball, paddle) {
 		return A3(_user$project$Main$near, paddle.x, 40, ball.x) && A3(_user$project$Main$near, paddle.y, 8, ball.y);
 	});
+<<<<<<< HEAD
 var _user$project$Main$physicsUpdate = F2(
 	function (t, _p2) {
 		var _p3 = _p2;
@@ -11740,18 +11836,41 @@ var _user$project$Main$physicsUpdate = F2(
 			_p3,
 			{x: _p3.x + (_p3.vx * t), y: _p3.y + (_p3.vy * t)});
 	});
+=======
+var _user$project$Main$powerupWithinX = F2(
+	function (ball, paddle) {
+		return A3(_user$project$Main$near, paddle.x, 50, ball.x) && A3(_user$project$Main$near, paddle.y, 8, ball.y);
+	});
+var _user$project$Main$physicsUpdate = F2(
+	function (t, _p3) {
+		var _p4 = _p3;
+		return _elm_lang$core$Native_Utils.update(
+			_p4,
+			{x: _p4.x + (_p4.vx * t), y: _p4.y + (_p4.vy * t)});
+	});
+var _user$project$Main$initialFlagY = {x: 0, y: 0, vx: 200, vy: 200};
+var _user$project$Main$initialBall4 = {x: 0, y: 0, vx: -100, vy: 100};
+var _user$project$Main$initialBall3 = {x: 0, y: 0, vx: 100, vy: -100};
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 var _user$project$Main$initialBall2 = {x: 0, y: 0, vx: -150, vy: -150};
 var _user$project$Main$initialBall1 = {x: 0, y: 0, vx: 150, vy: 150};
 var _user$project$Main$player = function (initialX) {
 	return {x: initialX, y: 0, vx: 0, vy: 0, score: 0};
 };
+<<<<<<< HEAD
 var _user$project$Main$_p4 = {ctor: '_Tuple2', _0: 300, _1: 200};
 var _user$project$Main$halfWidth = _user$project$Main$_p4._0;
 var _user$project$Main$halfHeight = _user$project$Main$_p4._1;
+=======
+var _user$project$Main$_p5 = {ctor: '_Tuple2', _0: 300, _1: 200};
+var _user$project$Main$halfWidth = _user$project$Main$_p5._0;
+var _user$project$Main$halfHeight = _user$project$Main$_p5._1;
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 var _user$project$Main$initialPlayer1 = {x: 20 - _user$project$Main$halfWidth, y: 0, vx: 0, vy: 0, score: 0};
 var _user$project$Main$initialPlayer2 = {x: _user$project$Main$halfWidth - 20, y: 0, vx: 0, vy: 0, score: 0};
 var _user$project$Main$initialPlayer3 = {x: 0, y: 10 - _user$project$Main$halfHeight, vx: 0, vy: 0, score: 0};
 var _user$project$Main$initialPlayer4 = {x: 0, y: _user$project$Main$halfHeight - 10, vx: 0, vy: 0, score: 0};
+<<<<<<< HEAD
 var _user$project$Main$updateBall = F6(
 	function (t, _p5, p1, p2, p3, p4) {
 		var _p6 = _p5;
@@ -11777,6 +11896,265 @@ var _user$project$Main$updateBall = F6(
 						A2(_user$project$Main$withinX, _p7, p3),
 						A2(_user$project$Main$withinX, _p7, p4))
 				})));
+=======
+var _user$project$Main$initialAi1 = {x: 20 - _user$project$Main$halfWidth, y: 0, vx: 0, vy: 0, score: 0};
+var _user$project$Main$initialAi2 = {x: _user$project$Main$halfWidth - 20, y: 0, vx: 0, vy: 0, score: 0};
+var _user$project$Main$initialAi3 = {x: 0, y: 10 - _user$project$Main$halfHeight, vx: 0, vy: 0, score: 0};
+var _user$project$Main$initialAi4 = {x: 0, y: _user$project$Main$halfHeight - 10, vx: 0, vy: 0, score: 0};
+var _user$project$Main$updateBall = function (t) {
+	return function (_p6) {
+		return function (p1) {
+			return function (p2) {
+				return function (p3) {
+					return function (p4) {
+						return function (ai1) {
+							return function (ai2) {
+								return function (ai3) {
+									return function (ai4) {
+										var _p7 = _p6;
+										var _p10 = _p7.vy;
+										var _p9 = _p7.vx;
+										var _p8 = _p7;
+										return (!A3(_user$project$Main$near, 0, _user$project$Main$halfWidth, _p8.x)) ? _elm_lang$core$Native_Utils.update(
+											_p8,
+											{x: 0, y: 0}) : ((!A3(_user$project$Main$near, 0, _user$project$Main$halfHeight, _p8.y)) ? _elm_lang$core$Native_Utils.update(
+											_p8,
+											{x: 0, y: 0}) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 3) < 0) && (_elm_lang$core$Native_Utils.cmp(p2.score, 3) < 0)) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$withinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, p2),
+														A2(_user$project$Main$withinY, _p8, p2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$withinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, p4),
+														A2(_user$project$Main$withinX, _p8, p4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 3) > -1) && (_elm_lang$core$Native_Utils.cmp(p2.score, 3) < 0)) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, p2),
+														A2(_user$project$Main$withinY, _p8, p2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$withinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p4),
+														A2(_user$project$Main$powerupWithinX, _p8, p4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 3) < 0) && (_elm_lang$core$Native_Utils.cmp(p2.score, 3) > -1)) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$withinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p2),
+														A2(_user$project$Main$powerupWithinY, _p8, p2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, p4),
+														A2(_user$project$Main$withinX, _p8, p4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 3) > -1) && ((_elm_lang$core$Native_Utils.cmp(p2.score, 3) > -1) && ((_elm_lang$core$Native_Utils.cmp(p1.score, 7) < 0) && (_elm_lang$core$Native_Utils.cmp(p2.score, 7) < 0)))) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p2),
+														A2(_user$project$Main$powerupWithinY, _p8, p2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p4),
+														A2(_user$project$Main$powerupWithinX, _p8, p4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 7) > -1) && (_elm_lang$core$Native_Utils.cmp(p2.score, 3) < 0)) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, ai1),
+														A2(_user$project$Main$withinY, _p8, p2),
+														A2(_user$project$Main$withinY, _p8, p2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$withinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p4),
+														A2(_user$project$Main$withinX, _p8, ai4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 3) < 0) && (_elm_lang$core$Native_Utils.cmp(p2.score, 7) > -1)) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$withinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p2),
+														A2(_user$project$Main$withinY, _p8, ai2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, ai3),
+														A2(_user$project$Main$withinX, _p8, p4),
+														A2(_user$project$Main$withinX, _p8, p4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p1.score, 7) > -1) && ((_elm_lang$core$Native_Utils.cmp(p2.score, 3) > -1) && (_elm_lang$core$Native_Utils.cmp(p2.score, 7) < 0))) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, ai1),
+														A2(_user$project$Main$powerupWithinY, _p8, p2),
+														A2(_user$project$Main$powerupWithinY, _p8, p2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$powerupWithinX, _p8, p4),
+														A2(_user$project$Main$withinX, _p8, ai4))
+												})) : (((_elm_lang$core$Native_Utils.cmp(p2.score, 7) > -1) && ((_elm_lang$core$Native_Utils.cmp(p1.score, 3) > -1) && (_elm_lang$core$Native_Utils.cmp(p1.score, 7) < 0))) ? A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$powerupWithinY, _p8, p2),
+														A2(_user$project$Main$withinY, _p8, ai2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, ai3),
+														A2(_user$project$Main$powerupWithinX, _p8, p4),
+														A2(_user$project$Main$powerupWithinX, _p8, p4))
+												})) : A2(
+											_user$project$Main$physicsUpdate,
+											t,
+											_elm_lang$core$Native_Utils.update(
+												_p8,
+												{
+													vx: A5(
+														_user$project$Main$stepV,
+														_p9,
+														A2(_user$project$Main$powerupWithinY, _p8, p1),
+														A2(_user$project$Main$withinY, _p8, ai1),
+														A2(_user$project$Main$powerupWithinY, _p8, p2),
+														A2(_user$project$Main$withinY, _p8, ai2)),
+													vy: A5(
+														_user$project$Main$stepV,
+														_p10,
+														A2(_user$project$Main$powerupWithinX, _p8, p3),
+														A2(_user$project$Main$withinX, _p8, ai3),
+														A2(_user$project$Main$powerupWithinX, _p8, p4),
+														A2(_user$project$Main$withinX, _p8, ai4))
+												})))))))))));
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _user$project$Main$updateFlag = F2(
+	function (t, _p11) {
+		var _p12 = _p11;
+		var _p14 = _p12.y;
+		var _p13 = _p12.x;
+		return A2(
+			_user$project$Main$physicsUpdate,
+			t,
+			_elm_lang$core$Native_Utils.update(
+				_p12,
+				{
+					vx: A5(
+						_user$project$Main$stepV,
+						_p12.vx,
+						_elm_lang$core$Native_Utils.cmp(_p13, 7 - _user$project$Main$halfWidth) < 0,
+						_elm_lang$core$Native_Utils.cmp(_p13, 7 - _user$project$Main$halfWidth) < 0,
+						_elm_lang$core$Native_Utils.cmp(_p13, _user$project$Main$halfWidth - 7) > 0,
+						_elm_lang$core$Native_Utils.cmp(_p13, _user$project$Main$halfWidth - 7) > 0),
+					vy: A5(
+						_user$project$Main$stepV,
+						_p12.vy,
+						_elm_lang$core$Native_Utils.cmp(_p14, 7 - _user$project$Main$halfHeight) < 0,
+						_elm_lang$core$Native_Utils.cmp(_p14, 7 - _user$project$Main$halfHeight) < 0,
+						_elm_lang$core$Native_Utils.cmp(_p14, _user$project$Main$halfHeight - 7) > 0,
+						_elm_lang$core$Native_Utils.cmp(_p14, _user$project$Main$halfHeight - 7) > 0)
+				}));
+	});
+var _user$project$Main$updateAiY = F3(
+	function (flag, points, player) {
+		return _elm_lang$core$Native_Utils.update(
+			player,
+			{
+				y: A3(_elm_lang$core$Basics$clamp, 22 - _user$project$Main$halfHeight, _user$project$Main$halfHeight - 22, flag.y),
+				score: player.score + points
+			});
+	});
+var _user$project$Main$updateAiX = F3(
+	function (flag, points, player) {
+		return _elm_lang$core$Native_Utils.update(
+			player,
+			{
+				x: A3(_elm_lang$core$Basics$clamp, 22 - _user$project$Main$halfWidth, _user$project$Main$halfWidth - 22, flag.x),
+				score: player.score + points
+			});
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 	});
 var _user$project$Main$updatePlayerY = F4(
 	function (t, dir, points, player) {
@@ -11812,6 +12190,7 @@ var _user$project$Main$updatePlayerX = F4(
 				score: player.score + points
 			});
 	});
+<<<<<<< HEAD
 var _user$project$Main$_p8 = {ctor: '_Tuple2', _0: 600, _1: 400};
 var _user$project$Main$gameWidth = _user$project$Main$_p8._0;
 var _user$project$Main$gameHeight = _user$project$Main$_p8._1;
@@ -11823,10 +12202,36 @@ var _user$project$Main$verticalLine = function (height) {
 			_1: {
 				ctor: '::',
 				_0: {ctor: '_Tuple2', _0: 0 - _user$project$Main$gameWidth, _1: 0 - _user$project$Main$gameHeight},
+=======
+var _user$project$Main$_p15 = {ctor: '_Tuple2', _0: 600, _1: 400};
+var _user$project$Main$gameWidth = _user$project$Main$_p15._0;
+var _user$project$Main$gameHeight = _user$project$Main$_p15._1;
+var _user$project$Main$blueLine = function (height) {
+	return _evancz$elm_graphics$Collage$path(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _user$project$Main$gameWidth - 10, _1: _user$project$Main$gameHeight},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 0 - _user$project$Main$gameWidth, _1: (0 - _user$project$Main$gameHeight) + 10},
 				_1: {ctor: '[]'}
 			}
 		});
 };
+var _user$project$Main$redLine = function (height) {
+	return _evancz$elm_graphics$Collage$path(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _user$project$Main$gameWidth + 10, _1: _user$project$Main$gameHeight},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 0 - _user$project$Main$gameWidth, _1: (0 - _user$project$Main$gameHeight) - 10},
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
+				_1: {ctor: '[]'}
+			}
+		});
+};
+<<<<<<< HEAD
 var _user$project$Main$view = function (_p9) {
 	var _p10 = _p9;
 	var _p13 = _p10.player2;
@@ -11834,6 +12239,21 @@ var _user$project$Main$view = function (_p9) {
 	var _p11 = _p10.windowDim;
 	var w = _p11._0;
 	var h = _p11._1;
+=======
+var _user$project$Main$view = function (_p16) {
+	var _p17 = _p16;
+	var _p26 = _p17.player4;
+	var _p25 = _p17.player3;
+	var _p24 = _p17.player2;
+	var _p23 = _p17.player1;
+	var _p22 = _p17.ai4;
+	var _p21 = _p17.ai3;
+	var _p20 = _p17.ai2;
+	var _p19 = _p17.ai1;
+	var _p18 = _p17.windowDim;
+	var w = _p18._0;
+	var h = _p18._1;
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 	var scores = A2(
 		_user$project$Main$txt,
 		_evancz$elm_graphics$Text$height(25),
@@ -11842,11 +12262,19 @@ var _user$project$Main$view = function (_p9) {
 			'Team&larr;&uarr; : ',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
+<<<<<<< HEAD
 				_elm_lang$core$Basics$toString(_p12.score),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'  Team&rarr;&darr; : ',
 					_elm_lang$core$Basics$toString(_p13.score)))));
+=======
+				_elm_lang$core$Basics$toString(_p23.score),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'  Team&rarr;&darr; : ',
+					_elm_lang$core$Basics$toString(_p24.score)))));
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 	return _evancz$elm_graphics$Element$toHtml(
 		A4(
 			_evancz$elm_graphics$Element$container,
@@ -11861,12 +12289,17 @@ var _user$project$Main$view = function (_p9) {
 					ctor: '::',
 					_0: A2(
 						_evancz$elm_graphics$Collage$filled,
+<<<<<<< HEAD
 						_user$project$Main$pongBlack,
+=======
+						_user$project$Main$gray,
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 						A2(_evancz$elm_graphics$Collage$rect, _user$project$Main$gameWidth, _user$project$Main$gameHeight)),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_evancz$elm_graphics$Collage$traced,
+<<<<<<< HEAD
 							_evancz$elm_graphics$Collage$dashed(_elm_lang$core$Color$white),
 							_user$project$Main$verticalLine(_user$project$Main$gameHeight)),
 						_1: {
@@ -11880,10 +12313,26 @@ var _user$project$Main$view = function (_p9) {
 								_0: A2(
 									_user$project$Main$make,
 									_p10.ball2,
+=======
+							_evancz$elm_graphics$Collage$dashed(_user$project$Main$team1),
+							_user$project$Main$redLine(_user$project$Main$gameHeight)),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_evancz$elm_graphics$Collage$traced,
+								_evancz$elm_graphics$Collage$dashed(_user$project$Main$team2),
+								_user$project$Main$blueLine(_user$project$Main$gameHeight)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_user$project$Main$makeBall,
+									_p17.ball1,
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 									A2(_evancz$elm_graphics$Collage$oval, 15, 15)),
 								_1: {
 									ctor: '::',
 									_0: A2(
+<<<<<<< HEAD
 										_user$project$Main$make,
 										_p12,
 										A2(_evancz$elm_graphics$Collage$rect, 10, 40)),
@@ -11919,6 +12368,123 @@ var _user$project$Main$view = function (_p9) {
 															_evancz$elm_graphics$Collage$toForm(
 																_user$project$Main$playOrPause(_p10.state))),
 														_1: {ctor: '[]'}
+=======
+										_user$project$Main$makeBall,
+										_p17.ball2,
+										A2(_evancz$elm_graphics$Collage$oval, 15, 15)),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_user$project$Main$makePowerBall1,
+											_p17.ball3,
+											A2(_evancz$elm_graphics$Collage$oval, 15, 15)),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_user$project$Main$makePowerBall2,
+												_p17.ball4,
+												A2(_evancz$elm_graphics$Collage$oval, 15, 15)),
+											_1: {
+												ctor: '::',
+												_0: (_elm_lang$core$Native_Utils.cmp(_p23.score, 7) < 0) ? A2(
+													_user$project$Main$makeAi,
+													_p19,
+													A2(_evancz$elm_graphics$Collage$rect, 10, 40)) : A2(
+													_user$project$Main$makeBall,
+													_p19,
+													A2(_evancz$elm_graphics$Collage$rect, 10, 40)),
+												_1: {
+													ctor: '::',
+													_0: (_elm_lang$core$Native_Utils.cmp(_p24.score, 7) < 0) ? A2(
+														_user$project$Main$makeAi,
+														_p20,
+														A2(_evancz$elm_graphics$Collage$rect, 10, 40)) : A2(
+														_user$project$Main$makeBall,
+														_p20,
+														A2(_evancz$elm_graphics$Collage$rect, 10, 40)),
+													_1: {
+														ctor: '::',
+														_0: (_elm_lang$core$Native_Utils.cmp(_p24.score, 7) < 0) ? A2(
+															_user$project$Main$makeAi,
+															_p21,
+															A2(_evancz$elm_graphics$Collage$rect, 70, 10)) : A2(
+															_user$project$Main$makeBall,
+															_p21,
+															A2(_evancz$elm_graphics$Collage$rect, 70, 10)),
+														_1: {
+															ctor: '::',
+															_0: (_elm_lang$core$Native_Utils.cmp(_p23.score, 7) < 0) ? A2(
+																_user$project$Main$makeAi,
+																_p22,
+																A2(_evancz$elm_graphics$Collage$rect, 70, 10)) : A2(
+																_user$project$Main$makeBall,
+																_p22,
+																A2(_evancz$elm_graphics$Collage$rect, 70, 10)),
+															_1: {
+																ctor: '::',
+																_0: (_elm_lang$core$Native_Utils.cmp(_p23.score, 3) < 0) ? A2(
+																	_user$project$Main$makeTeam1,
+																	_p23,
+																	A2(_evancz$elm_graphics$Collage$rect, 10, 40)) : A2(
+																	_user$project$Main$makeTeam1,
+																	_p23,
+																	A2(_evancz$elm_graphics$Collage$rect, 10, 70)),
+																_1: {
+																	ctor: '::',
+																	_0: (_elm_lang$core$Native_Utils.cmp(_p24.score, 3) < 0) ? A2(
+																		_user$project$Main$makeTeam2,
+																		_p24,
+																		A2(_evancz$elm_graphics$Collage$rect, 10, 40)) : A2(
+																		_user$project$Main$makeTeam2,
+																		_p24,
+																		A2(_evancz$elm_graphics$Collage$rect, 10, 70)),
+																	_1: {
+																		ctor: '::',
+																		_0: (_elm_lang$core$Native_Utils.cmp(_p24.score, 3) < 0) ? A2(
+																			_user$project$Main$makeTeam2,
+																			_p25,
+																			A2(_evancz$elm_graphics$Collage$rect, 70, 10)) : A2(
+																			_user$project$Main$makeTeam2,
+																			_p25,
+																			A2(_evancz$elm_graphics$Collage$rect, 90, 10)),
+																		_1: {
+																			ctor: '::',
+																			_0: (_elm_lang$core$Native_Utils.cmp(_p23.score, 3) < 0) ? A2(
+																				_user$project$Main$makeTeam1,
+																				_p26,
+																				A2(_evancz$elm_graphics$Collage$rect, 70, 10)) : A2(
+																				_user$project$Main$makeTeam1,
+																				_p26,
+																				A2(_evancz$elm_graphics$Collage$rect, 90, 10)),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(
+																					_evancz$elm_graphics$Collage$move,
+																					{ctor: '_Tuple2', _0: 0, _1: (_user$project$Main$gameHeight / 2) - 40},
+																					_evancz$elm_graphics$Collage$toForm(scores)),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(
+																						_evancz$elm_graphics$Collage$move,
+																						{ctor: '_Tuple2', _0: 0, _1: 80 - (_user$project$Main$gameHeight / 2)},
+																						_evancz$elm_graphics$Collage$toForm(
+																							_user$project$Main$playOrPause(_p17.state))),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(
+																							_evancz$elm_graphics$Collage$move,
+																							{ctor: '_Tuple2', _0: 0, _1: (_user$project$Main$gameHeight / 2) - 120},
+																							_evancz$elm_graphics$Collage$toForm(_user$project$Main$powerupString)),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 													}
 												}
 											}
@@ -11949,8 +12515,13 @@ var _user$project$Main$getInputs = F2(
 					_elm_lang$core$Native_Utils.chr('P')),
 				game.keysDown),
 			dir1: A2(_elm_lang$core$Set$member, 38, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 40, game.keysDown) ? -1 : 0),
+<<<<<<< HEAD
 			dir3: A2(_elm_lang$core$Set$member, 37, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 39, game.keysDown) ? 1 : 0),
 			dir4: A2(_elm_lang$core$Set$member, 65, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 68, game.keysDown) ? 1 : 0),
+=======
+			dir4: A2(_elm_lang$core$Set$member, 37, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 39, game.keysDown) ? 1 : 0),
+			dir3: A2(_elm_lang$core$Set$member, 65, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 68, game.keysDown) ? 1 : 0),
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 			dir2: A2(_elm_lang$core$Set$member, 87, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 83, game.keysDown) ? -1 : 0),
 			delta: _elm_lang$core$Time$inSeconds(delta)
 		};
@@ -11963,10 +12534,46 @@ var _user$project$Main$Player = F5(
 	function (a, b, c, d, e) {
 		return {x: a, y: b, vx: c, vy: d, score: e};
 	});
+<<<<<<< HEAD
 var _user$project$Main$Game = F9(
 	function (a, b, c, d, e, f, g, h, i) {
 		return {keysDown: a, windowDim: b, state: c, ball1: d, ball2: e, player1: f, player2: g, player3: h, player4: i};
 	});
+=======
+var _user$project$Main$Game = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return function (p) {
+																return {keysDown: a, windowDim: b, state: c, ball1: d, ball2: e, ball3: f, ball4: g, player1: h, player2: i, player3: j, player4: k, ai1: l, ai2: m, ai3: n, ai4: o, flagY: p};
+															};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 var _user$project$Main$Input = F8(
 	function (a, b, c, d, e, f, g, h) {
 		return {space: a, reset: b, pause: c, dir1: d, dir2: e, dir3: f, dir4: g, delta: h};
@@ -11989,7 +12596,11 @@ var _user$project$Main$KeyUp = function (a) {
 var _user$project$Main$KeyDown = function (a) {
 	return {ctor: 'KeyDown', _0: a};
 };
+<<<<<<< HEAD
 var _user$project$Main$subscriptions = function (_p14) {
+=======
+var _user$project$Main$subscriptions = function (_p27) {
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
@@ -12016,6 +12627,7 @@ var _user$project$Main$initialGame = {
 	state: _user$project$Main$Pause,
 	ball1: _user$project$Main$initialBall1,
 	ball2: _user$project$Main$initialBall2,
+<<<<<<< HEAD
 	player1: _user$project$Main$initialPlayer1,
 	player2: _user$project$Main$initialPlayer2,
 	player3: _user$project$Main$initialPlayer3,
@@ -12044,10 +12656,62 @@ var _user$project$Main$updateGame = F2(
 			_p21,
 			{state: _user$project$Main$Pause, ball1: _user$project$Main$initialBall1, ball2: _user$project$Main$initialBall2, player1: _user$project$Main$initialPlayer1, player2: _user$project$Main$initialPlayer2, player3: _user$project$Main$initialPlayer3, player4: _user$project$Main$initialPlayer4}) : _elm_lang$core$Native_Utils.update(
 			_p21,
+=======
+	ball3: _user$project$Main$initialBall3,
+	ball4: _user$project$Main$initialBall4,
+	player1: _user$project$Main$initialPlayer1,
+	player2: _user$project$Main$initialPlayer2,
+	player3: _user$project$Main$initialPlayer3,
+	player4: _user$project$Main$initialPlayer4,
+	ai1: _user$project$Main$initialAi1,
+	ai2: _user$project$Main$initialAi2,
+	ai3: _user$project$Main$initialAi3,
+	ai4: _user$project$Main$initialAi4,
+	flagY: _user$project$Main$initialFlagY
+};
+var _user$project$Main$Play = {ctor: 'Play'};
+var _user$project$Main$updateGame = F2(
+	function (_p29, _p28) {
+		var _p30 = _p29;
+		var _p51 = _p30.dir4;
+		var _p50 = _p30.dir3;
+		var _p49 = _p30.dir2;
+		var _p48 = _p30.dir1;
+		var _p47 = _p30.delta;
+		var _p31 = _p28;
+		var _p46 = _p31.state;
+		var _p45 = _p31.player4;
+		var _p44 = _p31.player3;
+		var _p43 = _p31.player2;
+		var _p42 = _p31.player1;
+		var _p41 = _p31;
+		var _p40 = _p31.flagY;
+		var _p39 = _p31.ball4;
+		var _p38 = _p31.ball3;
+		var _p37 = _p31.ball2;
+		var _p36 = _p31.ball1;
+		var _p35 = _p31.ai4;
+		var _p34 = _p31.ai3;
+		var _p33 = _p31.ai2;
+		var _p32 = _p31.ai1;
+		var newFlagY = _elm_lang$core$Native_Utils.eq(_p46, _user$project$Main$Pause) ? _p40 : A2(_user$project$Main$updateFlag, _p47, _p40);
+		var newBall4 = _elm_lang$core$Native_Utils.eq(_p46, _user$project$Main$Pause) ? _p39 : _user$project$Main$updateBall(_p47)(_p39)(_p42)(_p43)(_p44)(_p45)(_p32)(_p33)(_p34)(_p35);
+		var newBall3 = _elm_lang$core$Native_Utils.eq(_p46, _user$project$Main$Pause) ? _p38 : _user$project$Main$updateBall(_p47)(_p38)(_p42)(_p43)(_p44)(_p45)(_p32)(_p33)(_p34)(_p35);
+		var newBall2 = _elm_lang$core$Native_Utils.eq(_p46, _user$project$Main$Pause) ? _p37 : _user$project$Main$updateBall(_p47)(_p37)(_p42)(_p43)(_p44)(_p45)(_p32)(_p33)(_p34)(_p35);
+		var newBall1 = _elm_lang$core$Native_Utils.eq(_p46, _user$project$Main$Pause) ? _p36 : _user$project$Main$updateBall(_p47)(_p36)(_p42)(_p43)(_p44)(_p45)(_p32)(_p33)(_p34)(_p35);
+		var newState = _p30.space ? _user$project$Main$Play : (_p30.pause ? _user$project$Main$Pause : ((_elm_lang$core$Native_Utils.cmp(_p42.score, 15) > -1) ? _user$project$Main$Pause : ((_elm_lang$core$Native_Utils.cmp(_p43.score, 15) > -1) ? _user$project$Main$Pause : _p46)));
+		var score1 = (_elm_lang$core$Native_Utils.cmp(_p36.x, _user$project$Main$halfWidth) > 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p37.x, _user$project$Main$halfWidth) > 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p36.y, 0 - _user$project$Main$halfHeight) < 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p37.y, 0 - _user$project$Main$halfHeight) < 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p38.x, _user$project$Main$halfWidth) > 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p38.y, 0 - _user$project$Main$halfHeight) < 0) ? 1 : 0)))));
+		var score2 = (_elm_lang$core$Native_Utils.cmp(_p36.x, 0 - _user$project$Main$halfWidth) < 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p37.x, 0 - _user$project$Main$halfWidth) < 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p36.y, _user$project$Main$halfHeight) > 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p37.y, _user$project$Main$halfHeight) > 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p39.x, 0 - _user$project$Main$halfWidth) < 0) ? 1 : ((_elm_lang$core$Native_Utils.cmp(_p39.y, _user$project$Main$halfHeight) > 0) ? 1 : 0)))));
+		return _p30.reset ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{state: _user$project$Main$Pause, ball1: _user$project$Main$initialBall1, ball2: _user$project$Main$initialBall2, ball3: _user$project$Main$initialBall3, ball4: _user$project$Main$initialBall4, player1: _user$project$Main$initialPlayer1, player2: _user$project$Main$initialPlayer2, player3: _user$project$Main$initialPlayer3, player4: _user$project$Main$initialPlayer4, ai1: _user$project$Main$initialAi1, ai2: _user$project$Main$initialAi2, ai3: _user$project$Main$initialAi3, ai4: _user$project$Main$initialAi4, flagY: _user$project$Main$initialFlagY}) : (((_elm_lang$core$Native_Utils.cmp(_p42.score, 5) > -1) && ((_elm_lang$core$Native_Utils.cmp(_p42.score, 7) < 0) && (_elm_lang$core$Native_Utils.cmp(_p43.score, 5) < 0))) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 			{
 				state: newState,
 				ball1: newBall1,
 				ball2: newBall2,
+<<<<<<< HEAD
 				player1: A4(_user$project$Main$updatePlayerY, _p27, _p17.dir1, score1, _p22),
 				player2: A4(_user$project$Main$updatePlayerY, _p27, _p17.dir2, score2, _p23),
 				player3: A4(_user$project$Main$updatePlayerX, _p27, _p17.dir3, score2, _p24),
@@ -12058,13 +12722,142 @@ var _user$project$Main$update = F2(
 	function (msg, game) {
 		var _p28 = msg;
 		switch (_p28.ctor) {
+=======
+				ball3: newBall3,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p43.score, 5) > -1) && ((_elm_lang$core$Native_Utils.cmp(_p43.score, 7) < 0) && (_elm_lang$core$Native_Utils.cmp(_p42.score, 5) < 0))) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball4: newBall4,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p42.score, 7) > -1) && (_elm_lang$core$Native_Utils.cmp(_p43.score, 5) < 0)) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball3: newBall3,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				ai1: A3(_user$project$Main$updateAiY, _p40, score1, _p42),
+				ai4: A3(_user$project$Main$updateAiX, _p40, score1, _p45),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p43.score, 7) > -1) && (_elm_lang$core$Native_Utils.cmp(_p42.score, 5) < 0)) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball3: newBall3,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				ai2: A3(_user$project$Main$updateAiY, _p40, score2, _p43),
+				ai3: A3(_user$project$Main$updateAiX, _p40, score2, _p44),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p42.score, 7) > -1) && ((_elm_lang$core$Native_Utils.cmp(_p43.score, 5) > -1) && (_elm_lang$core$Native_Utils.cmp(_p43.score, 7) < 0))) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball3: newBall3,
+				ball4: newBall4,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				ai1: A3(_user$project$Main$updateAiY, _p40, score1, _p42),
+				ai4: A3(_user$project$Main$updateAiX, _p40, score1, _p45),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p43.score, 7) > -1) && ((_elm_lang$core$Native_Utils.cmp(_p42.score, 5) > -1) && (_elm_lang$core$Native_Utils.cmp(_p42.score, 7) < 0))) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball3: newBall3,
+				ball4: newBall4,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				ai2: A3(_user$project$Main$updateAiY, _p40, score2, _p43),
+				ai3: A3(_user$project$Main$updateAiX, _p40, score2, _p44),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p43.score, 5) > -1) && ((_elm_lang$core$Native_Utils.cmp(_p42.score, 5) > -1) && ((_elm_lang$core$Native_Utils.cmp(_p43.score, 7) < 0) && (_elm_lang$core$Native_Utils.cmp(_p42.score, 7) < 0)))) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball3: newBall3,
+				ball4: newBall4,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				flagY: newFlagY
+			}) : (((_elm_lang$core$Native_Utils.cmp(_p43.score, 7) > -1) && (_elm_lang$core$Native_Utils.cmp(_p42.score, 7) > -1)) ? _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				ball3: newBall3,
+				ball4: newBall4,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				ai1: A3(_user$project$Main$updateAiY, _p40, score1, _p42),
+				ai4: A3(_user$project$Main$updateAiX, _p40, score1, _p45),
+				ai2: A3(_user$project$Main$updateAiY, _p40, score2, _p43),
+				ai3: A3(_user$project$Main$updateAiX, _p40, score2, _p44),
+				flagY: newFlagY
+			}) : _elm_lang$core$Native_Utils.update(
+			_p41,
+			{
+				state: newState,
+				ball1: newBall1,
+				ball2: newBall2,
+				player1: A4(_user$project$Main$updatePlayerY, _p47, _p48, score1, _p42),
+				player2: A4(_user$project$Main$updatePlayerY, _p47, _p49, score2, _p43),
+				player3: A4(_user$project$Main$updatePlayerX, _p47, _p50, score2, _p44),
+				player4: A4(_user$project$Main$updatePlayerX, _p47, _p51, score1, _p45),
+				flagY: newFlagY
+			})))))))));
+	});
+var _user$project$Main$update = F2(
+	function (msg, game) {
+		var _p52 = msg;
+		switch (_p52.ctor) {
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 			case 'KeyDown':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						game,
 						{
+<<<<<<< HEAD
 							keysDown: A2(_elm_lang$core$Set$insert, _p28._0, game.keysDown)
+=======
+							keysDown: A2(_elm_lang$core$Set$insert, _p52._0, game.keysDown)
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -12074,12 +12867,20 @@ var _user$project$Main$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						game,
 						{
+<<<<<<< HEAD
 							keysDown: A2(_elm_lang$core$Set$remove, _p28._0, game.keysDown)
+=======
+							keysDown: A2(_elm_lang$core$Set$remove, _p52._0, game.keysDown)
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Tick':
+<<<<<<< HEAD
 				var input = A2(_user$project$Main$getInputs, game, _p28._0);
+=======
+				var input = A2(_user$project$Main$getInputs, game, _p52._0);
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 				return {
 					ctor: '_Tuple2',
 					_0: A2(_user$project$Main$updateGame, input, game),
@@ -12090,7 +12891,11 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						game,
+<<<<<<< HEAD
 						{windowDim: _p28._0}),
+=======
+						{windowDim: _p52._0}),
+>>>>>>> 424c150a2cfdebfd146a55aa34e06af49dd15d8f
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:

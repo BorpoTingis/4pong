@@ -40,10 +40,10 @@ getInputs game delta
            , dir1 = if Set.member 38 (game.keysDown) then 1 -- down arrow
                    else if Set.member 40 (game.keysDown) then -1 -- up arrow
                      else 0
-            , dir3 = if Set.member 37 (game.keysDown) then -1 -- left arrow
+            , dir4 = if Set.member 37 (game.keysDown) then -1 -- left arrow
                    else if Set.member 39 (game.keysDown) then 1 -- right arrow
                      else 0
-            , dir4 = if Set.member 65 (game.keysDown) then -1 -- a key
+            , dir3 = if Set.member 65 (game.keysDown) then -1 -- a key
                    else if Set.member 68 (game.keysDown) then 1 -- d key
                    else 0
             , dir2 = if Set.member 87 (game.keysDown) then 1 -- w key
@@ -121,10 +121,18 @@ type alias Game =
   , state : State
   , ball1 : Ball
   , ball2 : Ball
+  , ball3 : Ball --Powerup
+  , ball4 : Ball --Powerup
   , player1 : Player
   , player2 : Player
   , player3 : Player
   , player4 : Player
+  , ai1 : Player --PowerupTest
+  , ai2 : Player
+  , ai3 : Player
+  , ai4 : Player
+  , flagY : Ball -- Powerup
+
   }
 
 type alias Input =
@@ -151,6 +159,10 @@ initialBall1 = { x = 0, y = 0, vx = 150, vy = 150 }
 
 initialBall2 = { x = 0, y = 0, vx = -150, vy = -150}
 
+initialBall3 = {x = 0, y = 0, vx = 100, vy = -100} --Powerup
+
+initialBall4 = {x = 0, y = 0, vx = -100, vy = 100} --Powerup
+
 initialPlayer1 =  { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0 }
 
 initialPlayer2 = { x = halfWidth - 20, y = 0, vx = 0, vy = 0, score = 0 }
@@ -159,7 +171,15 @@ initialPlayer3 = { x = 0, y = 10 - halfHeight, vx = 0, vy = 0, score = 0 }
 
 initialPlayer4 = { x = 0, y = halfHeight - 10, vx = 0, vy = 0, score = 0 }
 
+initialAi1 = { x = 20 - halfWidth, y = 0, vx = 0, vy = 0, score = 0} --Powerup
 
+initialAi2 = { x = halfWidth - 20, y = 0, vx = 0, vy = 0, score = 0 }
+
+initialAi3 = { x = 0, y = 10 - halfHeight, vx = 0, vy = 0, score = 0 }
+
+initialAi4 = { x = 0, y = halfHeight - 10, vx = 0, vy = 0, score = 0 }
+
+initialFlagY = { x = 0, y = 0, vx = 200, vy = 200} --Powerup
 -- default game state, 4 players and one ball
 -- Need to figure out how to set (x,y) coords for the paddles, currently only takes (x)
 initialGame =
@@ -168,67 +188,280 @@ initialGame =
   , state   = Pause
   , ball1    = initialBall1
   , ball2 = initialBall2
+  , ball3 = initialBall3 --Powerup
+  , ball4 = initialBall4 --Powerup
   , player1 = initialPlayer1
   , player2 = initialPlayer2
   , player3 = initialPlayer3
   , player4 = initialPlayer4
+  , ai1 = initialAi1 --Powerup
+  , ai2 = initialAi2
+  , ai3 = initialAi3
+  , ai4 = initialAi4
+  , flagY = initialFlagY
   }
 
 -- UPDATE
 updateGame : Input -> Game -> Game
-updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, player1, player2, player3, player4} as game) =
+updateGame {space, reset, pause, dir1, dir2, dir3, dir4, delta} ({state, ball1, ball2, ball3, ball4, player1, player2, player3, player4, ai1, ai2, ai3, ai4, flagY} as game) = --powerup test
   let
-      score2 = if ball1.x <  -halfWidth then 1 else if ball2.x < -halfWidth then 1 else if ball1.y > halfHeight then 1 else if ball2.y > halfHeight then 1 else 0
-      score1 = if ball1.x > halfWidth then 1 else if ball2.x > halfWidth then 1 else if ball1.y < -halfHeight then 1 else if ball2.y < -halfHeight then 1 else 0
+      score2 = if ball1.x <  -halfWidth then 1
+        else if ball2.x < -halfWidth then 1
+          else if ball1.y > halfHeight then 1
+            else if ball2.y > halfHeight then 1
+              else if ball4.x < -halfWidth then 1 --Powerup
+                else if ball4.y > halfHeight then 1
+              else 0
+
+      score1 = if ball1.x > halfWidth then 1
+        else if ball2.x > halfWidth then 1
+          else if ball1.y < -halfHeight then 1
+            else if ball2.y < -halfHeight then 1
+              else if ball3.x > halfWidth then 1 --Powerup
+                else if ball3.y < -halfHeight then 1
+                  else 0
 
 
       newState =
         if  space then Play
         else if (pause) then Pause
-        --else if (score1 /= score2) then Pause
+        else if (player1.score >= 15) then Pause
+        else if (player2.score >= 15) then Pause--save this for capping max score
         else state
 
       newBall1 =
         if state == Pause
             then ball1
-            else updateBall delta ball1 player1 player2 player3 player4
+            else updateBall delta ball1 player1 player2 player3 player4 ai1 ai2 ai3 ai4
 
       newBall2 =
         if state == Pause
           then ball2
-          else updateBall delta ball2 player1 player2 player3 player4
+          else updateBall delta ball2 player1 player2 player3 player4 ai1 ai2 ai3 ai4
+
+      newBall3 = --powerup
+        if (state == Pause)
+          then ball3
+          else updateBall delta ball3 player1 player2 player3 player4 ai1 ai2 ai3 ai4
+      newBall4 = --powerup
+        if (state == Pause)
+          then ball4
+          else updateBall delta ball4 player1 player2 player3 player4 ai1 ai2 ai3 ai4
+
+      newFlagY = --powerup
+        if (state == Pause)
+          then flagY
+          else updateFlag delta flagY
+
  in
 
       if reset
          then { game | state   = Pause
                      , ball1    = initialBall1
                      , ball2 = initialBall2
+                     , ball3 = initialBall3 --Powerup
+                     , ball4 = initialBall4 --Powerup
                      , player1 = initialPlayer1
                      , player2 = initialPlayer2
                      , player3 = initialPlayer3
                      , player4 = initialPlayer4
+                     , ai1 = initialAi1 --Powerup
+                     , ai2 = initialAi2
+                     , ai3 = initialAi3
+                     , ai4 = initialAi4
+                     , flagY = initialFlagY --Powerup
               }
+        else if (player1.score >= 5 && player1.score < 7 && player2.score < 5) --team1 has 1st powerup
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , flagY = newFlagY
+
+                  }
+        else if (player2.score >= 5 && player2.score < 7 && player1.score < 5) --team 2 has 1st
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball4 = newBall4--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , flagY = newFlagY
+                  }
+        else if (player1.score >= 7 && player2.score < 5) --team1 has 2nd powerup
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , ai1 = updateAiY flagY score1 player1 --powerup
+                         , ai4 = updateAiX flagY score1 player4
+                         , flagY = newFlagY --Powerup
+                  }
+        else if (player2.score >= 7 && player1.score < 5) --team2 has 2nd powerup
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , ai2 = updateAiY flagY score2 player2 --powerup
+                         , ai3 = updateAiX flagY score2 player3
+                         , flagY = newFlagY --Powerup
+                  }
+
+        else if (player1.score >= 7 && player2.score >= 5 && player2.score < 7) --team1 has 2nd, team2 has 1st
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3--Powerup
+                         , ball4 = newBall4
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , ai1 = updateAiY flagY score1 player1 --powerup
+                         , ai4 = updateAiX flagY score1 player4
+                         , flagY = newFlagY --Powerup
+                  }
+
+        else if (player2.score >= 7 && player1.score >= 5 && player1.score < 7) --team2 has 2nd, team1 has 1st
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3--Powerup
+                         , ball4 = newBall4
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , ai2 = updateAiY flagY score2 player2 --powerup
+                         , ai3 = updateAiX flagY score2 player3
+                         , flagY = newFlagY --Powerup
+                  }
+        else if (player2.score >= 5 && player1.score >= 5 && player2.score < 7 && player1.score < 7) --both have 1st
+          then { game | state   = newState
+                         , ball1 = newBall1
+                         , ball2 = newBall2
+                         , ball3 = newBall3
+                         , ball4 = newBall4--Powerup
+                         , player1 = updatePlayerY delta dir1 score1 player1
+                         , player2 = updatePlayerY delta dir2 score2 player2
+                         , player3 = updatePlayerX delta dir3 score2 player3
+                         , player4 = updatePlayerX delta dir4 score1 player4
+                         , flagY = newFlagY
+                  }
+      else if (player2.score >= 7 && player1.score >= 7) --both have 2nd
+        then { game | state   = newState
+                       , ball1 = newBall1
+                       , ball2 = newBall2
+                       , ball3 = newBall3--Powerup
+                       , ball4 = newBall4--Powerup
+                       , player1 = updatePlayerY delta dir1 score1 player1
+                       , player2 = updatePlayerY delta dir2 score2 player2
+                       , player3 = updatePlayerX delta dir3 score2 player3
+                       , player4 = updatePlayerX delta dir4 score1 player4
+                       , ai1 = updateAiY flagY score1 player1 --powerup
+                       , ai4 = updateAiX flagY score1 player4
+                       , ai2 = updateAiY flagY score2 player2 --powerup
+                       , ai3 = updateAiX flagY score2 player3
+                       , flagY = newFlagY --Powerup
+                }
+
       else { game | state   = newState
-                     , ball1    = newBall1
+                     , ball1 = newBall1
                      , ball2 = newBall2
+
                      , player1 = updatePlayerY delta dir1 score1 player1
                      , player2 = updatePlayerY delta dir2 score2 player2
                      , player3 = updatePlayerX delta dir3 score2 player3
                      , player4 = updatePlayerX delta dir4 score1 player4
-
+                     , flagY = newFlagY
               }
 
-updateBall : Time -> Ball -> Player -> Player -> Player -> Player -> Ball
-updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 =
+updateBall : Time -> Ball -> Player -> Player -> Player -> Player -> Player -> Player -> Player -> Player -> Ball
+updateBall t ({x, y, vx, vy} as ball) p1 p2 p3 p4 ai1 ai2 ai3 ai4 =
   if not (ball.x |> near 0 halfWidth)
     then { ball | x = 0, y = 0 }
   else if not (ball.y |> near 0 halfHeight)
     then { ball | x = 0, y = 0 }
-    else physicsUpdate t
+    else if (p1.score < 3 && p2.score < 3) then physicsUpdate t --powerup --both has none
             { ball |
-                vx = stepV vx (withinY ball p1) (withinY ball p2),
-                vy = stepV vy (withinX ball p3) (withinX ball p4)
+                vx = stepV vx (withinY ball p1) (withinY ball p1) (withinY ball p2) (withinY ball p2),
+                vy = stepV vy (withinX ball p3) (withinX ball p3) (withinX ball p4) (withinX ball p4)
             }
+    else  if (p1.score >= 3 && p2.score < 3) then physicsUpdate t --team1 has 1st
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (powerupWithinY ball p1) (withinY ball p2) (withinY ball p2),
+                vy = stepV vy (withinX ball p3) (withinX ball p3) (powerupWithinX ball p4) (powerupWithinX ball p4)
+            }
+    else  if (p1.score < 3 && p2.score >= 3) then physicsUpdate t --team2 has 1st
+            { ball |
+                vx = stepV vx (withinY ball p1) (withinY ball p1) (powerupWithinY ball p2) (powerupWithinY ball p2),
+                vy = stepV vy (powerupWithinX ball p3) (powerupWithinX ball p3) (withinX ball p4) (withinX ball p4)
+            }
+    else  if (p1.score >= 3 && p2.score >= 3 && p1.score < 7 && p2.score < 7) then physicsUpdate t --both have 1st
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (powerupWithinY ball p1) (powerupWithinY ball p2) (powerupWithinY ball p2),
+                vy = stepV vy (powerupWithinX ball p3) (powerupWithinX ball p3) (powerupWithinX ball p4) (powerupWithinX ball p4)
+            }
+    else  if (p1.score >= 7 && p2.score < 3) then physicsUpdate t --team1 has 2nd
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (withinY ball ai1) (withinY ball p2) (withinY ball p2), --(withinY ball ai1),
+                vy = stepV vy (withinX ball p3) (withinX ball p3) (powerupWithinX ball p4) (withinX ball ai4) --(withinX ball ai4)
+            }
+    else  if (p1.score < 3 && p2.score >= 7) then physicsUpdate t --team2 has 2nd
+            { ball |
+                vx = stepV vx (withinY ball p1) (withinY ball p1) (powerupWithinY ball p2) (withinY ball ai2),-- (withinY ball ai2),
+                vy = stepV vy (powerupWithinX ball p3) (withinX ball ai3) (withinX ball p4) (withinX ball p4) --(withinX ball ai3)
+            }
+    else  if (p1.score >= 7 && p2.score >= 3 && p2.score < 7) then physicsUpdate t --team1 has 2nd, team2 has 1st
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (withinY ball ai1) (powerupWithinY ball p2) (powerupWithinY ball p2), --(withinY ball ai1),
+                vy = stepV vy (powerupWithinX ball p3) (powerupWithinX ball p3) (powerupWithinX ball p4) (withinX ball ai4) --(withinX ball ai4)
+            }
+    else  if (p2.score >= 7 && p1.score >= 3 && p1.score < 7) then physicsUpdate t --team1 has 1st, team2 has 2nd
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (powerupWithinY ball p1) (powerupWithinY ball p2) (withinY ball ai2), -- (withinY ball ai2),
+                vy = stepV vy (powerupWithinX ball p3) (withinX ball ai3) (powerupWithinX ball p4) (powerupWithinX ball p4)-- (withinX ball ai3)
+            }
+    else physicsUpdate t --both have 2nd
+            { ball |
+                vx = stepV vx (powerupWithinY ball p1) (withinY ball ai1) (powerupWithinY ball p2) (withinY ball ai2), -- (withinY ball ai1) (withinY ball ai2),
+                vy = stepV vy (powerupWithinX ball p3) (withinX ball ai3) (powerupWithinX ball p4) (withinX ball ai4) --(withinY ball ai3) (withinY ball ai4)
+            }
+updateFlag : Time -> Ball -> Ball --powerup
+updateFlag t ({x, y, vx, vy} as ball) = physicsUpdate t
+        { ball |
+            vx = stepV vx (x < 7 - halfWidth) (x < 7 - halfWidth) (x > halfWidth - 7) (x > halfWidth - 7),
+            vy = stepV vy (y < 7 - halfHeight) (y < 7 - halfHeight) (y > halfHeight - 7) (y > halfHeight - 7)
+        }
+
+updateAiY : Ball -> Int -> Player -> Player
+updateAiY flag points player =
+  { player |
+      y = clamp (22 - halfHeight) (halfHeight - 22) flag.y,
+      score = player.score + points
+    }
+
+updateAiX : Ball -> Int -> Player -> Player
+updateAiX flag points player =
+  { player |
+      x = clamp (22 - halfWidth) (halfWidth - 22) flag.x,
+      score = player.score + points
+    }
+
 
 updatePlayerY : Time -> Int -> Int -> Player -> Player
 updatePlayerY t dir points player =
@@ -262,47 +495,96 @@ near k c n =
 withinY ball paddle =
     near paddle.x 8 ball.x && near paddle.y 20 ball.y
 
-
+powerupWithinY ball paddle =
+  near paddle.x 8 ball.x && near paddle.y 30 ball.y
 
 withinX ball paddle =
     near paddle.x 40 ball.x && near paddle.y 8 ball.y
 
+powerupWithinX ball paddle =
+  near paddle.x 50 ball.x && near paddle.y 8 ball.y
 
-stepV v lowerCollision upperCollision =
+stepV v lowerCollision lower1 upperCollision upper1  =
   if lowerCollision then abs v
   else if upperCollision then 0 - abs v
+  else if lower1 then abs v
+  else if upper1 then 0 - abs v
   else v
 
 -- VIEW, this is where we would add a menu screen I think
 view : Game -> Html Msg
-view {windowDim, state, ball1, ball2, player1, player2, player3, player4} =
+view {windowDim, state, ball1, ball2, ball3, ball4, player1, player2, player3, player4, ai1, ai2, ai3, ai4, flagY} =
   let scores : Element
       scores = txt (Text.height 25) ("Team&larr;&uarr; : " ++ toString player1.score ++ "  Team&rarr;&darr; : " ++ toString player2.score)
       (w,h) = windowDim
   in
+
       toHtml <|
       container w h middle <|
       collage gameWidth gameHeight
         [ rect gameWidth gameHeight
-            |> filled pongBlack
-        , verticalLine gameHeight
-            |> traced (dashed white)
+            |> filled gray
+        , redLine gameHeight
+            |> traced (dashed team1)
+        , blueLine gameHeight
+            |> traced (dashed team2)
         , oval 15 15
-            |> make ball1
+            |> makeBall ball1
         , oval 15 15
-            |> make ball2
-        , rect 10 40
-            |> make player1
-        , rect 10 40
-            |> make player2
-        , rect 70 10
-            |> make player3
-        , rect 70 10
-            |> make player4
+            |> makeBall ball2
+        , oval 15 15
+            |> makePowerBall1 ball3 --Powerup
+        , oval 15 15
+            |> makePowerBall2 ball4 --Powerup
+        , if (player1.score < 7) then
+          rect 10 40
+            |> makeAi ai1
+          else rect 10 40
+            |> makeBall ai1
+        , if (player2.score < 7) then
+          rect 10 40
+            |> makeAi ai2
+          else rect 10 40
+            |> makeBall ai2
+        , if (player2.score < 7) then
+          rect 70 10
+            |> makeAi ai3
+          else rect 70 10
+            |> makeBall ai3
+        , if (player1.score < 7) then
+          rect 70 10
+            |> makeAi ai4
+          else rect 70 10
+            |> makeBall ai4
+
+
+        , if (player1.score < 3) then
+          rect 10 40
+            |> makeTeam1 player1
+          else rect 10 70
+            |> makeTeam1 player1
+
+        , if (player2.score < 3) then
+          rect 10 40
+            |> makeTeam2 player2
+          else rect 10 70
+            |> makeTeam2 player2
+        , if (player2.score < 3) then
+          rect 70 10
+            |> makeTeam2 player3
+          else rect 90 10
+            |> makeTeam2 player3
+        , if (player1.score < 3) then
+          rect 70 10
+            |> makeTeam1 player4
+          else rect 90 10
+            |> makeTeam1 player4
         , toForm scores
             |> move (0, gameHeight/2 - 40)
         , toForm (playOrPause state)
             |> move (0, 80 - gameHeight/2)
+        , toForm (powerupString)
+            |> move (0, gameHeight/2 - 120)
         ]
 
 playOrPause state =
@@ -310,22 +592,60 @@ playOrPause state =
         Play    -> txt identity ""
         Pause   -> txt identity pauseMessage
 
-verticalLine height = path [(gameWidth, gameHeight), (-gameWidth, -gameHeight)]
-
+powerupString = txt2 identity powerupMessage
+blueLine height = path [(gameWidth - 10, gameHeight), (-gameWidth, -gameHeight + 10)]
+redLine height = path [(gameWidth + 10, gameHeight), (-gameWidth, -gameHeight - 10)]
 
 -- default colors
-team1 = rgb 255 0 0
+team1 = rgb 0 0 0
 
-team2 = rgb 0 255 0
+team2 = rgb 255 255 255
 
 pongBlack = rgb 0 0 0
 
+gray = rgb 125 125 125
+
 textWhite = rgb 255 255 255
 
-txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
-pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down;, player&rarr;: W S, player&darr;: left right, player&uarr;: A D"
+gold = rgb 218 165 32
 
-make obj shape =
+txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
+pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&uarr;: left right, player&darr;: A D, player&rarr;: W S"
+
+txt2 g = Text.fromString >> Text.color black >> Text.monospace >> g >> leftAligned
+powerupMessage = "1st power-up: extended paddles\nrequried score: 3\n\n2nd power-up: an extra team-ball\nrequired score: 5\n\n3rd power-up: team-AI\nrequired score: 7"
+
+makeBall obj shape =
     shape
-      |> filled white
+      |> filled gold
+      |> move (obj.x,obj.y)
+
+makeFlag obj shape =
+    shape
+      |> filled red --testing color
+      |> move (obj.x,obj.y)
+
+makePowerBall1 obj shape =
+  shape
+    |> filled team1
+    |> move (obj.x, obj.y)
+
+makePowerBall2 obj shape =
+  shape
+    |> filled team2
+    |> move (obj.x, obj.y)
+
+makeTeam1 obj shape =
+    shape
+      |> filled team1
+      |> move (obj.x,obj.y)
+
+makeTeam2 obj shape =
+    shape
+      |> filled team2
+      |> move (obj.x,obj.y)
+
+makeAi obj shape =
+    shape
+      |> filled gray
       |> move (obj.x,obj.y)
