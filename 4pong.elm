@@ -37,17 +37,17 @@ getInputs game delta
          = { space = Set.member (Char.toCode ' ') (game.keysDown)
            , reset = Set.member (Char.toCode 'R') (game.keysDown)
            , pause = Set.member (Char.toCode 'P') (game.keysDown)
-           , dir1 = if Set.member 38 (game.keysDown) then 1 -- down arrow
-                   else if Set.member 40 (game.keysDown) then -1 -- up arrow
+           , dir1 = if Set.member 89 (game.keysDown) then 1 -- y arrow
+                   else if Set.member 72 (game.keysDown) then -1 -- h arrow
                      else 0
-            , dir4 = if Set.member 37 (game.keysDown) then -1 -- left arrow
-                   else if Set.member 39 (game.keysDown) then 1 -- right arrow
+            , dir4 = if Set.member 67 (game.keysDown) then -1 -- c arrow
+                   else if Set.member 66 (game.keysDown) then 1 -- b arrow
                      else 0
-            , dir3 = if Set.member 65 (game.keysDown) then -1 -- a key
-                   else if Set.member 68 (game.keysDown) then 1 -- d key
+            , dir3 = if Set.member 49 (game.keysDown) then -1 -- 1 key
+                   else if Set.member 51 (game.keysDown) then 1 -- 3 key
                    else 0
-            , dir2 = if Set.member 87 (game.keysDown) then 1 -- w key
-                    else if Set.member 83 (game.keysDown) then -1 --s key
+            , dir2 = if Set.member 79 (game.keysDown) then 1 -- o key
+                    else if Set.member 76 (game.keysDown) then -1 --l key
                     else 0
            , delta = inSeconds delta
            }
@@ -610,7 +610,7 @@ textWhite = rgb 255 255 255
 gold = rgb 218 165 32
 
 txt f = Text.fromString >> Text.color textWhite >> Text.monospace >> f >> leftAligned
-pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&uarr;: left right, player&darr;: A D, player&rarr;: W S"
+pauseMessage = "SPACE to start, P to pause, R to reset \nplayer&larr;: Y H, player&uarr;: C B, player&darr;: 1 3, player&rarr;: O L"
 
 txt2 g = Text.fromString >> Text.color black >> Text.monospace >> g >> leftAligned
 powerupMessage = "1st power-up: extended paddles\nrequried score: 3\n\n2nd power-up: an extra team-ball\nrequired score: 5\n\n3rd power-up: team-AI\nrequired score: 7"
