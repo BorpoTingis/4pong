@@ -1,6 +1,6 @@
 # 4Pong
 
-A 4 player pong game writen in Elm by Jerry and Merritt. :sparkles:
+A 4 player pong game written in Elm by Jerry and Merritt. :sparkles:
 
 
 # Packages Used
