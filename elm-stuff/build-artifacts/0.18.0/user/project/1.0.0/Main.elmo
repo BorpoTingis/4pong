@@ -17,7 +17,7 @@ var _user$project$Main$txt2 = function (g) {
 						_evancz$elm_graphics$Text$fromString(_p0)))));
 	};
 };
-var _user$project$Main$pauseMessage = 'SPACE to start, P to pause, R to reset \nplayer&larr;: up down, player&uarr;: left right, player&darr;: A D, player&rarr;: W S';
+var _user$project$Main$pauseMessage = 'SPACE to start, P to pause, R to reset \nplayer&larr;: Y H, player&uarr;: C B, player&darr;: 1 3, player&rarr;: O L';
 var _user$project$Main$gold = A3(_elm_lang$core$Color$rgb, 218, 165, 32);
 var _user$project$Main$makeBall = F2(
 	function (obj, shape) {
@@ -658,10 +658,10 @@ var _user$project$Main$getInputs = F2(
 				_elm_lang$core$Char$toCode(
 					_elm_lang$core$Native_Utils.chr('P')),
 				game.keysDown),
-			dir1: A2(_elm_lang$core$Set$member, 38, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 40, game.keysDown) ? -1 : 0),
-			dir4: A2(_elm_lang$core$Set$member, 37, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 39, game.keysDown) ? 1 : 0),
-			dir3: A2(_elm_lang$core$Set$member, 65, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 68, game.keysDown) ? 1 : 0),
-			dir2: A2(_elm_lang$core$Set$member, 87, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 83, game.keysDown) ? -1 : 0),
+			dir1: A2(_elm_lang$core$Set$member, 89, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 72, game.keysDown) ? -1 : 0),
+			dir4: A2(_elm_lang$core$Set$member, 67, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 66, game.keysDown) ? 1 : 0),
+			dir3: A2(_elm_lang$core$Set$member, 49, game.keysDown) ? -1 : (A2(_elm_lang$core$Set$member, 51, game.keysDown) ? 1 : 0),
+			dir2: A2(_elm_lang$core$Set$member, 79, game.keysDown) ? 1 : (A2(_elm_lang$core$Set$member, 76, game.keysDown) ? -1 : 0),
 			delta: _elm_lang$core$Time$inSeconds(delta)
 		};
 	});
