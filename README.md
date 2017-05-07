@@ -2,6 +2,8 @@
 
 A 4 player pong game written in Elm by Jerry and Merritt. :sparkles:
 
+Works Cited
+Base code from: https://github.com/davydog187/elm-pong
 
 # Packages Used
  * evancz/elm-graphics
